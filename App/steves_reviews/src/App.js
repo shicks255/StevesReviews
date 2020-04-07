@@ -3,6 +3,8 @@ import logo from './logo.svg';
 import './App.css';
 import Header from './components/Header';
 import Footer from "./components/Footer";
+import Review from "./components/Review";
+import SiteStats from "./components/SiteStats";
 
 function App() {
 
@@ -11,6 +13,7 @@ function App() {
     async function fetchRecentReviews() {
         const data = await fetch('/review/recent');
         const reviews = data.json();
+        console.log(reviews);
         return reviews;
     }
 
@@ -24,21 +27,32 @@ function App() {
         <div className="App">
             <Header />
 
-            These are reviews of some albums I have listened to over the years.
-            Please feel free to add your own reviews
+            <div className="level">
+                <div className="level-item is-centered centerText">
+                    These are reviews of some albums I have listened to over the years.
+                    <br/>
+                    Please feel free to add your own reviews
+                </div>
+            </div>
 
             <div className="container">
-                <div className="siteStats">
+                <div className="columns">
+                    <div className="column is-one-quarter">
+                        <SiteStats />
+                    </div>
 
-                </div>
-                <div className="recentReviews">
-                    {recentReviews.map(rev => {
-                        return (
-                            <p>
-                                {rev.album.name}
-                            </p>
-                        )
-                    })}
+                    <div className="column is-three-quarters">
+                        <div className="level">
+                            <div className="level-item is-center">
+                                <h1 className="title">Recent Reviews</h1>
+                            </div>
+                        </div>
+                        {recentReviews.map(rev => {
+                            return (
+                                <Review review={rev}/>
+                            )
+                        })}
+                    </div>
                 </div>
             </div>
 

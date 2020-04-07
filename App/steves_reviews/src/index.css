@@ -11,3 +11,33 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+h1 {
+  font-weight: bold;
+}
+table td.alignRight{
+  text-align: right;
+}
+.columns:not(.noPad){
+  padding: 2rem;
+}
+.centerText{
+  text-align: center;
+}
+textarea {
+  max-width: 95%;
+}
+
+.reviewContent {
+  white-space: pre-wrap;
+  position: relative;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity .2s linear, visibility .1s linear;
+}
+.collapsed {
+  position: absolute;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity .11s linear, visibility 1s linear;
+}
