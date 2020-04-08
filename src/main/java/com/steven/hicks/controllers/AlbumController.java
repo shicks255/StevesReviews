@@ -3,6 +3,7 @@ package com.steven.hicks.controllers;
 import com.steven.hicks.beans.album.Image;
 import com.steven.hicks.logic.AlbumSearcher;
 import com.steven.hicks.models.album.Album;
+import com.steven.hicks.models.dtos.AlbumWithReviewAverageDTO;
 import com.steven.hicks.services.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Stream;
 
 @RestController
@@ -34,6 +37,11 @@ public class AlbumController {
                 .orElse(images[0]);
 
         return imageUrl;
+    }
+
+    @GetMapping("/topRated")
+    public List<AlbumWithReviewAverageDTO> getTopRated() {
+       return m_albumService.getTopRated();
     }
 
 }

@@ -8,7 +8,6 @@ export default function SiteStats() {
     async function getSiteStats() {
         const data = await fetch('/stats/siteStats')
         const siteStats = await data.json();
-        console.log(siteStats);
         setStats(siteStats);
     }
 
