@@ -1,11 +1,18 @@
 package com.steven.hicks.services;
 
+import com.steven.hicks.beans.ArtistAlbums;
 import com.steven.hicks.beans.album.Image;
+import com.steven.hicks.logic.AlbumQueryBuilder;
 import com.steven.hicks.logic.AlbumSearcher;
+import com.steven.hicks.logic.ArtistQueryBuilder;
+import com.steven.hicks.logic.ArtistSearcher;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.album.Album;
+import com.steven.hicks.models.artist.Artist;
+import com.steven.hicks.models.dtos.AlbumWithImageDTO;
 import com.steven.hicks.models.dtos.AlbumWithReviewAverageDTO;
 import com.steven.hicks.repositories.AlbumRepository;
+import com.steven.hicks.repositories.ArtistRepository;
 import com.steven.hicks.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -24,6 +31,9 @@ public class AlbumService {
 
     @Autowired
     ReviewRepository m_reviewRepository;
+
+    @Autowired
+    ArtistRepository m_artistRepository;
 
     @Autowired
     JdbcTemplate m_jdbcTemplate;
@@ -65,6 +75,45 @@ public class AlbumService {
         }
 
         return albumWithReviewAverageDTOS;
+    }
+
+    public List<ArtistAlbums> getNonDBAlbums(int artistId) {
+        Artist artist = m_artistRepository.findById(artistId)
+                .orElseThrow();
+
+        ArtistSearcher artistSearcher = new ArtistSearcher();
+        ArtistQueryBuilder aqb = new ArtistQueryBuilder.Builder()
+                .artistName(artist.getName())
+                .mbid(artist.getMbid())
+                .build();
+
+        List<ArtistAlbums> nonDbAlbums
+                = artistSearcher.getAlbums(aqb);
+
+        return nonDbAlbums;
+    }
+
+    public List<AlbumWithImageDTO> getAlbumsForArtist(int artistId) {
+        List<Album> albums = m_albumRepository.findAllByArtistId(artistId);
+        List<AlbumWithImageDTO> albumWithImageDTOS = new ArrayList<>();
+        AlbumSearcher albumSearcher = new AlbumSearcher();
+        albums.forEach(x -> {
+            com.steven.hicks.beans.album.Album searchResult = albumSearcher.getFullAlbum(x.getMbid(), x.getName(), x.getArtist().getName());
+
+            Image[] images = searchResult.getImage();
+
+            Image imageUrl = Stream.of(images)
+                    .filter(y -> y.getSize().equalsIgnoreCase("large"))
+                    .findFirst()
+                    .orElse(images[0]);
+
+            albumWithImageDTOS.add(
+                    new AlbumWithImageDTO(x, imageUrl.getText())
+            );
+        });
+
+
+        return albumWithImageDTOS;
     }
 
 }

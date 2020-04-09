@@ -1,9 +1,12 @@
 package com.steven.hicks.controllers;
 
+import com.steven.hicks.beans.ArtistAlbums;
 import com.steven.hicks.beans.album.Image;
 import com.steven.hicks.logic.AlbumSearcher;
 import com.steven.hicks.models.album.Album;
+import com.steven.hicks.models.dtos.AlbumWithImageDTO;
 import com.steven.hicks.models.dtos.AlbumWithReviewAverageDTO;
+import com.steven.hicks.models.dtos.CombinedAlbumsDTO;
 import com.steven.hicks.services.AlbumService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,8 +14,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RestController
@@ -42,6 +45,22 @@ public class AlbumController {
     @GetMapping("/topRated")
     public List<AlbumWithReviewAverageDTO> getTopRated() {
        return m_albumService.getTopRated();
+    }
+
+    @GetMapping("/artist/{artistId}")
+    public CombinedAlbumsDTO getAlbumsForArtist(@PathVariable("artistId") int artistId) {
+        List<AlbumWithImageDTO> albumWithImageDTOS = m_albumService.getAlbumsForArtist(artistId);
+        List<ArtistAlbums> nonDBAlbums = m_albumService.getNonDBAlbums(artistId);
+
+        List<String> dbAlbumNames = albumWithImageDTOS.stream()
+                .map(x -> x.getAlbum().getName())
+                .collect(Collectors.toList());
+
+        List<ArtistAlbums> filteredNonDBAlbums = nonDBAlbums.stream()
+                .filter(s -> !dbAlbumNames.contains(s.getName()))
+                .collect(Collectors.toList());
+
+        return new CombinedAlbumsDTO(albumWithImageDTOS, filteredNonDBAlbums);
     }
 
 }

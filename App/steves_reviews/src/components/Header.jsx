@@ -8,7 +8,7 @@ export default function Header() {
             <nav className="navbar is-light" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                     <div className="navbar-item">
-                        <a href="@controllers.routes.HomeController.index()">
+                        <a href="/">
                             <figure className="image">
                                 <img src={Logo} />
                             </figure>
@@ -28,7 +28,7 @@ export default function Header() {
                             <a href="@controllers.routes.ArtistController.artistSearchHome()">Search for artist</a>
                         </div>
                         <div className="navbar-item">
-                            <a href="@controllers.routes.ReviewController.topRated()">Top Rated</a>
+                            <a href="/topRated">Top Rated</a>
                         </div>
                         {/*@if(session.get("userId").nonEmpty) {*/}
                         <div className="navbar-item">
