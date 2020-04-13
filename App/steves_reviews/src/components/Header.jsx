@@ -25,7 +25,7 @@ export default function Header() {
                 <div id="navbarLinks" className="navbar-menu">
                     <div className="navbar-start is-light">
                         <div className="navbar-item">
-                            <a href="@controllers.routes.ArtistController.artistSearchHome()">Search for artist</a>
+                            <a href="/search">Search for artist</a>
                         </div>
                         <div className="navbar-item">
                             <a href="/topRated">Top Rated</a>

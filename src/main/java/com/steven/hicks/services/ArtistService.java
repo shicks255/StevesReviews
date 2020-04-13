@@ -23,31 +23,31 @@ public class ArtistService {
     @Autowired
     ArtistImageRepository m_artistImageRepository;
 
-    public ArtistWithImageDTO getArtistById(int id) {
-        Artist artist = m_artistRepository.findById(id)
-                .orElseThrow();
-
-        ArtistQueryBuilder aqb = new ArtistQueryBuilder.Builder()
-                .artistName(artist.getName())
-                .mbid(artist.getMbid())
-                .build();
-
-        ArtistSearcher searcher = new ArtistSearcher();
-        List<com.steven.hicks.beans.artist.Artist> searchResults = searcher.searchForArtists(aqb);
-        if (artist.getMbid().length() > 0) {
-            Image[] images = searchResults.stream()
-                    .filter(x -> x.getMbid().equalsIgnoreCase(artist.getMbid()))
-                    .findFirst().orElseThrow()
-                    .getImage();
-
-            return new ArtistWithImageDTO(artist, images[0].getText());
-        }
-
-        Image[] images = searchResults.stream()
-                .filter(x -> x.getName().equalsIgnoreCase(artist.getName()))
-                .findFirst().orElseThrow()
-                .getImage();
-
-        return new ArtistWithImageDTO(artist, images[0].getSize());
-    }
+//    public ArtistWithImageDTO getArtistById(int id) {
+//        Artist artist = m_artistRepository.findById(id)
+//                .orElseThrow();
+//
+//        ArtistQueryBuilder aqb = new ArtistQueryBuilder.Builder()
+//                .artistName(artist.getName())
+//                .mbid(artist.getMbid())
+//                .build();
+//
+//        ArtistSearcher searcher = new ArtistSearcher();
+//        List<com.steven.hicks.beans.artist.Artist> searchResults = searcher.searchForArtists(aqb);
+//        if (artist.getMbid().length() > 0) {
+//            com.steven.hicks.beans.artist.Artist full = searcher.getfusearchResults.stream()
+//                    .filter(x -> x.getMbid().equalsIgnoreCase(artist.getMbid()))
+//                    .findFirst().orElseThrow()
+//                    .getImage();
+//
+//            return new ArtistWithImageDTO(artist, images[0].getText());
+//        }
+//
+//        Image[] images = searchResults.stream()
+//                .filter(x -> x.getName().equalsIgnoreCase(artist.getName()))
+//                .findFirst().orElseThrow()
+//                .getImage();
+//
+//        return new ArtistWithImageDTO(artist, images[0].getSize());
+//    }
 }

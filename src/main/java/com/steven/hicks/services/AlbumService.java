@@ -59,7 +59,7 @@ public class AlbumService {
                     .findFirst().orElseThrow();
             Album album = m_albumRepository.getOne(Integer.parseInt(a[0]));
 
-            AlbumSearcher albumSearcher = new AlbumSearcher();
+            AlbumSearcher albumSearcher = new AlbumSearcher("c349ab1fcb6b132ffb8d842e982458db");
             com.steven.hicks.beans.album.Album searchResult = albumSearcher.getFullAlbum(album.getMbid(), album.getName(), album.getArtist().getName());
 
             Image[] images = searchResult.getImage();
@@ -81,7 +81,7 @@ public class AlbumService {
         Artist artist = m_artistRepository.findById(artistId)
                 .orElseThrow();
 
-        ArtistSearcher artistSearcher = new ArtistSearcher();
+        ArtistSearcher artistSearcher = new ArtistSearcher("c349ab1fcb6b132ffb8d842e982458db", "e10d02f0a079517e365621fb714c944a");
         ArtistQueryBuilder aqb = new ArtistQueryBuilder.Builder()
                 .artistName(artist.getName())
                 .mbid(artist.getMbid())
@@ -96,7 +96,7 @@ public class AlbumService {
     public List<AlbumWithImageDTO> getAlbumsForArtist(int artistId) {
         List<Album> albums = m_albumRepository.findAllByArtistId(artistId);
         List<AlbumWithImageDTO> albumWithImageDTOS = new ArrayList<>();
-        AlbumSearcher albumSearcher = new AlbumSearcher();
+        AlbumSearcher albumSearcher = new AlbumSearcher("c349ab1fcb6b132ffb8d842e982458db");
         albums.forEach(x -> {
             com.steven.hicks.beans.album.Album searchResult = albumSearcher.getFullAlbum(x.getMbid(), x.getName(), x.getArtist().getName());
 
