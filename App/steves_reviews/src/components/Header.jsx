@@ -10,17 +10,17 @@ export default function Header() {
                     <div className="navbar-item">
                         <a href="/">
                             <figure className="image">
-                                <img src={Logo} />
+                                <img alt="stevesreviews.net" src={Logo} />
                             </figure>
                         </a>
                     </div>
 
-                    <a role="button" className="navbar-burger" aria-label="menu" aria-expanded="false"
+                    <button className="navbar-burger" aria-label="menu" aria-expanded="false"
                        data-target="navbarLinks">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
-                    </a>
+                    </button>
                 </div>
                 <div id="navbarLinks" className="navbar-menu">
                     <div className="navbar-start is-light">
@@ -37,11 +37,9 @@ export default function Header() {
                         < div className="navbar-item">
                             <a href="@controllers.routes.UserController.logout()">Logout</a>
                         </div>
-                        {/*}else{*/}
                         <div className="navbar-item">
                             <a href="@controllers.routes.UserController.loginHome()">Login/Register</a>
                         </div>
-                        // }
                     </div>
                     <div className="navbar-end">
                         <div className="navbar-item">

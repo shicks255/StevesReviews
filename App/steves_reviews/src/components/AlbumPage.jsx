@@ -1,4 +1,5 @@
 import React, {useEffect, useState} from 'react';
+import Review from "./Review";
 
 export default function AlbumPage(props) {
 
@@ -20,12 +21,13 @@ export default function AlbumPage(props) {
 
     useEffect(() => {
         getAlbum();
-    },[]);
+    }, []);
 
     function getTimeStamp(millis) {
-        const minutes = Math.floor((millis/1000)/60);
-        const left = millis - (minutes*1000*60);
-        const seconds = left/1000;
+        const totalSeconds = (millis/1000);
+        const minutes = Math.floor(totalSeconds/60);
+        const left = totalSeconds - (minutes*60);
+        const seconds = Math.round(left);
 
         return minutes + ":" + seconds;
     }
@@ -50,7 +52,7 @@ export default function AlbumPage(props) {
 
             <div className="columns">
                 <div className="column is-one-third">
-                    <img src={album.images[0][0].image}/>
+                    <img src={album.images ? album.images[0] ? album.images[0][0].image : '' : ''}/>
 
                     <table className="table is-hoverable is-narrow">
                         <tbody>
@@ -59,14 +61,39 @@ export default function AlbumPage(props) {
                         </tr>
 
                         {album.tracks[0].map(tr => {
-                            return <tr>
-                                    <td>{tr.number}</td>
-                                    <td>{tr.title}</td>
-                                    <td>{getTimeStamp(tr.length)}</td>
-                                </tr>
+                            return <tr key={tr.id}>
+                                <td>{tr.number}</td>
+                                <td>{tr.title}</td>
+                                <td>{getTimeStamp(tr.length)}</td>
+                            </tr>
                         })}
                         </tbody>
                     </table>
+                </div>
+
+                <div className="column is-two-thirds">
+                    <table className="table is-narrow is-hoverable is-fullwidth">
+                        <tbody>
+                        <tr>
+                            <td colSpan="2">{album.title}</td>
+                        </tr>
+                        <tr>
+                            <td colSpan="2">
+                                <a href={`/artist/${credit.artist.id}`}><b>{credit.name}</b></a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Released:</td>
+                            <td>{album['first-release-date']}</td>
+                        </tr>
+                        <tr>
+                            <td>Rating:</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    {album.reviews.map(r => {
+                        return <Review key={r.id} album={album} review={r} />
+                    })}
                 </div>
             </div>
         </div>

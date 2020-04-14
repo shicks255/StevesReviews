@@ -1,12 +1,18 @@
 package com.steven.hicks.controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.steven.hicks.beans.album.Image;
 import com.steven.hicks.logic.AlbumSearcher;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
+import com.steven.hicks.models.Review;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.dtos.AlbumWithReviewAverageDTO;
+import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.services.AlbumService;
+import com.steven.hicks.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -22,7 +28,10 @@ public class AlbumController {
 
     @Autowired
     private AlbumService m_albumService;
+    @Autowired
+    private ReviewService m_reviewService;
 
+    private ObjectMapper m_objectMapper = new ObjectMapper();
     private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
     @GetMapping("/artist/{artistMbid}")
@@ -35,6 +44,17 @@ public class AlbumController {
     @GetMapping("/{albumMbid}")
     public JsonNode getAlbumForArtist(@PathVariable String albumMbid) {
         JsonNode album = m_mbAlbumSearcher.getAlbum(albumMbid);
+
+        List<ReviewDTO> reviews = m_reviewService.getReviewsForAlbum(albumMbid);
+        try
+        {
+            String reviewNode = m_objectMapper.writeValueAsString(reviews);
+            JsonNode review = m_objectMapper.readTree(reviewNode);
+            ((ObjectNode)album).put("reviews", review);
+        } catch (JsonProcessingException e)
+        {
+            e.printStackTrace();
+        }
 
         return album;
     }

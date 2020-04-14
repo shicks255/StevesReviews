@@ -8,15 +8,13 @@ function Main() {
 
     async function fetchRecentReviews() {
         const data = await fetch('/review/recent');
-        const reviews = data.json();
+        const reviews = await data.json();
         console.log(reviews);
-        return reviews;
+        setRecentReviews(reviews);
     }
 
     useEffect(() => {
-        fetchRecentReviews().then((reviews) => {
-            setRecentReviews(reviews);
-        });
+        fetchRecentReviews()
     }, []);
 
     return (
@@ -41,10 +39,8 @@ function Main() {
                                 <h1 className="title">Recent Reviews</h1>
                             </div>
                         </div>
-                        {recentReviews.map(rev => {
-                            return (
-                                <Review review={rev}/>
-                            )
+                        {recentReviews.map(rwa => {
+                            return <Review album={rwa.album} review={rwa.review}/>
                         })}
                     </div>
                 </div>

@@ -1,7 +1,5 @@
 package com.steven.hicks.models;
 
-import com.steven.hicks.models.album.Album;
-
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -14,9 +12,11 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-    @OneToOne
-    @JoinColumn(name = "album_id")
-    private Album album;
+//    @OneToOne
+//    @JoinColumn(name = "album_id")
+//    private Album album;
+
+    private String albumId;
 
     @OneToOne
     @JoinColumn(name = "user_id")
@@ -30,7 +30,7 @@ public class Review {
 
     @Override
     public String toString() {
-        return String.format("Review %s %s", user.getUsername(), album.getName());
+        return String.format("Review %s", user.getUsername());
     }
 
     @Override
@@ -54,12 +54,21 @@ public class Review {
         this.id = id;
     }
 
-    public Album getAlbum() {
-        return album;
+//    public Album getAlbum() {
+//        return album;
+//    }
+//
+//    public void setAlbum(Album album) {
+//        this.album = album;
+//    }
+
+
+    public String getAlbumId() {
+        return albumId;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
     }
 
     public User getUser() {

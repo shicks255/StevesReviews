@@ -1,6 +1,7 @@
 package com.steven.hicks.controllers;
 
 import com.steven.hicks.models.dtos.ReviewDTO;
+import com.steven.hicks.models.dtos.ReviewWithAlbum;
 import com.steven.hicks.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -17,7 +18,7 @@ public class ReviewController {
     ReviewService m_reviewService;
 
     @GetMapping("/recent")
-    public List<ReviewDTO> getRecentReview() {
+    public List<ReviewWithAlbum> getRecentReview() {
         return m_reviewService.getRecentReviews();
     }
 }

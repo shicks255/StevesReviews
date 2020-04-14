@@ -29,7 +29,7 @@ public class ArtistController {
 //        return m_artistService.getArtistById(artistId);
 
         JsonNode artist =
-                m_mbArtistSearcher.getArtist(id);
+                m_mbArtistSearcher.getArtistWithImages(id, FAN_ART_KEY);
 
         return artist;
     }

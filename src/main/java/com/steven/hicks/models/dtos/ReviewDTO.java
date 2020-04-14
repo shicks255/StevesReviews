@@ -2,7 +2,6 @@ package com.steven.hicks.models.dtos;
 
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
-import com.steven.hicks.models.album.Album;
 
 import java.time.format.DateTimeFormatter;
 
@@ -12,7 +11,8 @@ public class ReviewDTO {
             = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
     private int id;
-    private Album album;
+//    private Album album;
+    private String albumId;
     private User user;
     private String addedOn;
     private String content;
@@ -21,7 +21,8 @@ public class ReviewDTO {
 
     public ReviewDTO(Review review) {
         this.id = review.getId();
-        this.album = review.getAlbum();
+//        this.album = review.getAlbum();
+        this.albumId = review.getAlbumId();
         this.user = review.getUser();
         this.content = review.getContent();
         this.rating = review.getRating();
@@ -45,13 +46,21 @@ public class ReviewDTO {
         this.id = id;
     }
 
-    public Album getAlbum() {
-        return album;
+    public String getAlbumId() {
+        return albumId;
     }
 
-    public void setAlbum(Album album) {
-        this.album = album;
+    public void setAlbumId(String albumId) {
+        this.albumId = albumId;
     }
+
+    //    public Album getAlbum() {
+//        return album;
+//    }
+//
+//    public void setAlbum(Album album) {
+//        this.album = album;
+//    }
 
     public User getUser() {
         return user;

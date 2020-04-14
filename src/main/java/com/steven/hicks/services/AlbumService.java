@@ -54,7 +54,7 @@ public class AlbumService {
         List<AlbumWithReviewAverageDTO> albumWithReviewAverageDTOS = new ArrayList<>();
 
         for (String[] a : albums) {
-            List<Review> reviews = m_reviewRepository.findAllByAlbumId(Integer.parseInt(a[0]));
+            List<Review> reviews = m_reviewRepository.findAllByAlbumId(a[0]);
             Review top = reviews.stream().sorted(Comparator.comparing(Review::getRating))
                     .findFirst().orElseThrow();
             Album album = m_albumRepository.getOne(Integer.parseInt(a[0]));

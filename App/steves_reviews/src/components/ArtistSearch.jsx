@@ -1,10 +1,8 @@
 import React, {useState} from 'react';
-import {Redirect} from "react-router-dom";
 
 export default function ArtistSearch(props) {
 
     const [formValue, setFormValue] = useState("");
-    const [doRedirect, setDoRedirect] = useState(false);
 
     console.log(props.history);
 
@@ -14,15 +12,8 @@ export default function ArtistSearch(props) {
 
     function submitForm(e) {
         e.preventDefault();
-        console.log('hi');
-        setDoRedirect(true);
         props.history.push(`/search/${formValue}`);
     }
-
-    // if (doRedirect)
-    //     return <Redirect
-    //         push={true}
-    //         to={`/search/${formValue}`} />
 
     return (
         <div>

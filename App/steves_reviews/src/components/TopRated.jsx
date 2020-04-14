@@ -29,7 +29,7 @@ export default function TopRated() {
                             <a href="@controllers.routes.ArtistController.artistHome(a.artist.id.get)"><b>{ar.album.artist.name}</b></a>
                             <figure className="image is-128x128">
                                 <a href="@controllers.routes.AlbumController.albumHome(a.id)" >
-                                    <img src={ar.imageUrl}/>
+                                    <img alt='images' src={ar.imageUrl}/>
                                 </a>
                             </figure>
                             <a href="@controllers.routes.AlbumController.albumHome(a.id)">{ar.album.name}</a>
