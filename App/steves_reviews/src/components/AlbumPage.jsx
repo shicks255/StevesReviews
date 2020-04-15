@@ -7,20 +7,24 @@ export default function AlbumPage(props) {
     const [album, setAlbum] = useState({});
     const [loading, setLoading] = useState(true);
     const [credit, setCredit] = useState({});
+    const [image, setImage] = useState('');
 
-    async function getAlbum() {
-        console.log(id);
+    async function getAlbumAndArtistAndImage() {
         const data = await fetch(`/album/${id}`);
         const album = await data.json();
-        console.log(album);
         setAlbum(album);
+
+        const data2 = await fetch('http://coverartarchive.org/release-group/' + album.id);
+        const json = await data2.json();
+        setImage(json.images[0].image);
+
         const credit = album['artist-credit'][0];
         setCredit(credit);
         setLoading(false);
     }
 
     useEffect(() => {
-        getAlbum();
+        getAlbumAndArtistAndImage();
     }, []);
 
     function getTimeStamp(millis) {
@@ -52,7 +56,9 @@ export default function AlbumPage(props) {
 
             <div className="columns">
                 <div className="column is-one-third">
-                    <img src={album.images ? album.images[0] ? album.images[0][0].image : '' : ''}/>
+                    <figure className='image is-512x512'>
+                        <img src={image}/>
+                    </figure>
 
                     <table className="table is-hoverable is-narrow">
                         <tbody>
@@ -92,7 +98,7 @@ export default function AlbumPage(props) {
                         </tbody>
                     </table>
                     {album.reviews.map(r => {
-                        return <Review key={r.id} album={album} review={r} />
+                        return <Review hideAlbum={true} key={r.id} album={album} review={r} />
                     })}
                 </div>
             </div>

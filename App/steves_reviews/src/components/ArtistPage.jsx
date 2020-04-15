@@ -8,17 +8,15 @@ export default function ArtistPage(props) {
     const [albums, setAlbums] = useState([]);
     const [releaseTypes, setReleaseTypes] = useState([]);
     const [loading, setLoading] = useState(true);
-    // const [fetchedAlbums, setFetchedAlbum] = useState([]);
 
     async function fetchData() {
         const artistData = await fetch(`/artist/${id}`);
         const artistJson = await artistData.json();
-        console.log(artistJson);
         setArtist(artistJson);
-        console.log(artistJson);
 
         const albums = await fetch(`/album/artist/${id}`);
-        const albumsJson = await albums.json();
+        let albumsJson = await albums.json();
+        albumsJson = albumsJson.filter(x => x['first-release-date'].length > 0);
         albumsJson.sort((a,b) => {
             return a['first-release-date'].localeCompare(b['first-release-date']);
         });
@@ -26,12 +24,8 @@ export default function ArtistPage(props) {
         const types = new Set();
         albumsJson.forEach((e) => types.add(e['primary-type']));
         setReleaseTypes([...types]);
-        console.log(types);
 
         setAlbums(albumsJson);
-        // setFetchedAlbum(albumsJson)
-        console.log('the albums are...');
-        console.log(albumsJson);
         setLoading(false);
     }
 
@@ -54,7 +48,9 @@ export default function ArtistPage(props) {
                 <div className="card">
                     <div className="card-image">
                         <div className="image">
-                            {artist.images ? artist.images[0] ? <img src={artist.images[0][0]['#text']} /> : '' : ''}
+                            <figure className="image is-512x512">
+                                {artist.images ? artist.images[0] ? <img src={artist.images[0][0]['#text']} /> : '' : ''}
+                            </figure>
                         </div>
                         <div className="card-content">
                             <div className="content">
@@ -75,17 +71,7 @@ export default function ArtistPage(props) {
                             <table className="table">
                                 <tbody>
                                 {albums.filter(x => x['primary-type'] == rt).map(a => {
-                                    return <tr key={a.id}>
-                                        <td>
-                                            <img alt='image' src={
-                                                a.images ? a.images[0] ? a.images[0][0].thumbnails.small : '' : ''} />
-                                        </td>
-                                        <td>
-                                            <Link to={`/album/${a.id}`}>{a.title}</Link>
-                                            <br/>
-                                            {a['first-release-date'].substring(0,4)}
-                                        </td>
-                                    </tr>
+                                    return <AlbumLine album={a} />
                                 })}
                                 </tbody>
                             </table>
@@ -93,15 +79,39 @@ export default function ArtistPage(props) {
                     );
                 })}
 
-                {/*<table classNameName="table">*/}
-                {/*    <tbody>*/}
-                {/*    <tr>*/}
-                {/*        <th>Or add an album that's not yet in the database(if you are a <a href="@routes.UserController.registerHome()">registered user</a>).</th>*/}
-                {/*    </tr>*/}
-                {/*    </tbody>*/}
-                {/*</table>*/}
             </div>
-
         </div>
     );
+}
+
+function AlbumLine(props) {
+
+    const album = props.album;
+    const [image, setImage] = useState('');
+
+    async function getImage() {
+        const data = await fetch('http://coverartarchive.org/release-group/' + album.id);
+        const json = await data.json();
+        setImage(json.images[0].image);
+    }
+
+    useEffect(() => {
+        getImage();
+    }, [])
+
+    return (
+        <tr key={album.id}>
+            <td>
+                <figure className="image is-128x128">
+                    <img alt='image' src={image} />
+                </figure>
+            </td>
+            <td>
+                <Link to={`/album/${album.id}`}>{album.title}</Link>
+                <br/>
+                {album['first-release-date'].substring(0,4)}
+            </td>
+        </tr>
+    )
+
 }
