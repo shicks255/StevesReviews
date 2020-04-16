@@ -3,9 +3,7 @@ package com.steven.hicks.services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
-import com.steven.hicks.models.Review;
 import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.models.dtos.ReviewWithAlbum;
 import com.steven.hicks.repositories.ReviewRepository;
@@ -22,7 +20,6 @@ public class ReviewService {
     ReviewRepository m_reviewRepository;
 
     private ObjectMapper m_objectMapper = new ObjectMapper();
-
     private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
     public List<ReviewWithAlbum> getRecentReviews() {

@@ -1,7 +1,6 @@
 package com.steven.hicks.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.logic.musicBrainz.MBArtistSearcher;
 import com.steven.hicks.services.ArtistService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +21,9 @@ public class ArtistController {
     private String FAN_ART_KEY = "";
 
     private MBArtistSearcher m_mbArtistSearcher = new MBArtistSearcher();
-    private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
     @GetMapping("/{id}")
     public JsonNode getArtist(@PathVariable("id") String id) {
-//        return m_artistService.getArtistById(artistId);
-
         JsonNode artist =
                 m_mbArtistSearcher.getArtistWithImages(id, FAN_ART_KEY);
 
@@ -37,8 +33,6 @@ public class ArtistController {
     @GetMapping("/search/{searchTerms}")
     public JsonNode searchForArtist(@PathVariable String searchTerms) {
         JsonNode artistSearchResults = m_mbArtistSearcher.searchForArtist(searchTerms);
-//        JsonNode artistSearchResults = m_mbArtistSearcher.searchForArtistWithImages(searchTerms, FAN_ART_KEY);
-        System.out.println(artistSearchResults);
         return artistSearchResults;
     }
 

@@ -40,7 +40,7 @@ function Main() {
                             </div>
                         </div>
                         {recentReviews.map(rwa => {
-                            return <Review album={rwa.album} review={rwa.review}/>
+                            return <Review key={rwa.review.id} album={rwa.album} review={rwa.review}/>
                         })}
                     </div>
                 </div>
