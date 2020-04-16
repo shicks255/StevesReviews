@@ -71,7 +71,7 @@ export default function ArtistPage(props) {
                             <table className="table">
                                 <tbody>
                                 {albums.filter(x => x['primary-type'] == rt).map(a => {
-                                    return <AlbumLine album={a} />
+                                    return <AlbumLine key={a.id} album={a} />
                                 })}
                                 </tbody>
                             </table>
@@ -110,6 +110,9 @@ function AlbumLine(props) {
                 <Link to={`/album/${album.id}`}>{album.title}</Link>
                 <br/>
                 {album['first-release-date'].substring(0,4)}
+            </td>
+            <td>
+                <b>{album.rating && album.rating}</b>
             </td>
         </tr>
     )

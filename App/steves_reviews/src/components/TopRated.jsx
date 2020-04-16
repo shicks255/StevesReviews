@@ -61,6 +61,7 @@ function AlbumLine(props) {
                 <a href={`/album/${ar.album.id}`}>{ar.album.title}</a>
             </td>
             <td>{ar.averageRating}</td>
+            <td>{ar.review.content}</td>
         </tr>
     );
 }

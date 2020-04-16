@@ -52,4 +52,8 @@ public class ReviewService {
 
         return reviews;
     }
+
+    public Double getAverageRating(String albumId) {
+        return m_reviewRepository.getAverageRating(albumId);
+    }
 }

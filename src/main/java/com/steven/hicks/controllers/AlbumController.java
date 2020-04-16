@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Iterator;
 import java.util.List;
 
 @RestController
@@ -32,6 +33,13 @@ public class AlbumController {
     @GetMapping("/artist/{artistMbid}")
     public JsonNode getAlbumsForArtist(@PathVariable String artistMbid) {
         JsonNode albums = m_mbAlbumSearcher.searchForAlbumsByArtist(artistMbid);
+
+        for (Iterator<JsonNode> it = albums.iterator(); it.hasNext(); ) {
+            JsonNode album = it.next();
+            Double rating = m_reviewService.getAverageRating(album.get("id").asText());
+            ((ObjectNode)album).put("rating", rating);
+        }
+
         return albums;
     }
 
