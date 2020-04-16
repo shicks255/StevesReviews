@@ -93,7 +93,7 @@ export default function AlbumPage(props) {
                             <td>{album['first-release-date']}</td>
                         </tr>
                         <tr>
-                            <td>Rating:</td>
+                            <td>Rating: {album.rating && album.rating}</td>
                         </tr>
                         </tbody>
                     </table>

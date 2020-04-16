@@ -49,6 +49,8 @@ public class AlbumController {
         List<ReviewDTO> reviews = m_reviewService.getReviewsForAlbum(albumMbid);
         try
         {
+            Double rating = m_reviewService.getAverageRating(albumMbid);
+            ((ObjectNode)album).put("rating", rating);
             String reviewNode = m_objectMapper.writeValueAsString(reviews);
             JsonNode review = m_objectMapper.readTree(reviewNode);
             ((ObjectNode)album).put("reviews", review);
