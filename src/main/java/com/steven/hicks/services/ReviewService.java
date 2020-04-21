@@ -4,6 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
+import com.steven.hicks.models.Review;
 import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.models.dtos.ReviewWithAlbum;
 import com.steven.hicks.repositories.ReviewRepository;
@@ -55,5 +56,9 @@ public class ReviewService {
 
     public Double getAverageRating(String albumId) {
         return m_reviewRepository.getAverageRating(albumId);
+    }
+
+    public Review findFirstByAlbumIdOrderByRatingDesc(String albumId) {
+        return m_reviewRepository.findFirstByAlbumIdOrderByRatingDesc(albumId);
     }
 }

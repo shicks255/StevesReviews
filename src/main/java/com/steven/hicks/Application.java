@@ -24,10 +24,10 @@ public class Application implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        Artist artists = m_artistRepository.findById(73).get();
-        System.out.println(artists);
-
-        Review review = m_reviewRepository.findById(64).get();
-        System.out.println(review);
+//        Artist artists = m_artistRepository.findById(73).get();
+//        System.out.println(artists);
+//
+//        Review review = m_reviewRepository.findById(64).get();
+//        System.out.println(review);
     }
 }

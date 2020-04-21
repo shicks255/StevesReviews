@@ -16,13 +16,12 @@ export default function ArtistPage(props) {
 
         const albums = await fetch(`/album/artist/${id}`);
         let albumsJson = await albums.json();
-        albumsJson = albumsJson.filter(x => x['first-release-date'].length > 0);
         albumsJson.sort((a,b) => {
-            return a['first-release-date'].localeCompare(b['first-release-date']);
+            return a.releaseDate.localeCompare(b.releaseDate);
         });
 
         const types = new Set();
-        albumsJson.forEach((e) => types.add(e['primary-type']));
+        albumsJson.forEach((e) => types.add(e.type));
         setReleaseTypes([...types]);
 
         setAlbums(albumsJson);
@@ -70,7 +69,7 @@ export default function ArtistPage(props) {
                             <p>{rt}s</p>
                             <table className="table">
                                 <tbody>
-                                {albums.filter(x => x['primary-type'] == rt).map(a => {
+                                {albums.filter(x => x.type == rt).map(a => {
                                     return <AlbumLine key={a.id} album={a} />
                                 })}
                                 </tbody>
@@ -109,7 +108,7 @@ function AlbumLine(props) {
             <td>
                 <Link to={`/album/${album.id}`}>{album.title}</Link>
                 <br/>
-                {album['first-release-date'].substring(0,4)}
+                {album.releaseDate.substring(0,4)}
             </td>
             <td>
                 <b>{album.rating && album.rating}</b>

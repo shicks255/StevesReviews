@@ -4,22 +4,24 @@ import Review from "./Review";
 export default function AlbumPage(props) {
 
     const id = props.match.params.id;
-    const [album, setAlbum] = useState({});
     const [loading, setLoading] = useState(true);
-    const [credit, setCredit] = useState({});
     const [image, setImage] = useState('');
+    const [data, setData] = useState({});
+    const [discs, setDiscs] = useState([]);
 
     async function getAlbumAndArtistAndImage() {
-        const data = await fetch(`/album/${id}`);
-        const album = await data.json();
-        setAlbum(album);
+        const result = await fetch(`/album/${id}`);
+        const data = await result.json();
+        setData(data);
 
-        const data2 = await fetch('http://coverartarchive.org/release-group/' + album.id);
+        let discs = new Set();
+        data.album.tracks.forEach(x => discs.add(x.disc));
+        setDiscs([...discs]);
+
+        const data2 = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
         const json = await data2.json();
         setImage(json.images[0].image);
 
-        const credit = album['artist-credit'][0];
-        setCredit(credit);
         setLoading(false);
     }
 
@@ -44,10 +46,10 @@ export default function AlbumPage(props) {
             <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
                     <li>
-                        <a href={`/artist/${credit.artist.id}`}><b>{credit.name}</b></a>
+                        <a href={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></a>
                     </li>
                     <li className="is-active">
-                        <a href="#" aria-current="page">{album.title}</a>
+                        <a href="#" aria-current="page">{data.album.title}</a>
                     </li>
                 </ul>
             </nav>
@@ -65,40 +67,49 @@ export default function AlbumPage(props) {
                         <tr>
                             <td colSpan="3"><b>Tracks</b></td>
                         </tr>
-
-                        {album.tracks[0].map(tr => {
-                            return <tr key={tr.id}>
-                                <td>{tr.number}</td>
-                                <td>{tr.title}</td>
-                                <td>{getTimeStamp(tr.length)}</td>
-                            </tr>
-                        })}
                         </tbody>
                     </table>
+
+                    {discs.map(d => {
+                        return (
+                            <table>
+                                <tbody>
+                                <tr><td colSpan={3}>{discs.length > 1 ? <b>Disc {d}</b> : ''}</td></tr>
+                                {data.album.tracks.filter(tr => tr.disc == d).map(tr => {
+                                    return <tr key={tr.id}>
+                                        <td>{tr.number}</td>
+                                        <td>{tr.title}</td>
+                                        <td>{getTimeStamp(tr.length)}</td>
+                                    </tr>
+                                })}
+                                </tbody>
+                            </table>
+                        )
+                    })}
                 </div>
 
                 <div className="column is-two-thirds">
                     <table className="table is-narrow is-hoverable is-fullwidth">
                         <tbody>
                         <tr>
-                            <td colSpan="2">{album.title}</td>
+                            <td colSpan="2">{data.album.title}</td>
                         </tr>
                         <tr>
                             <td colSpan="2">
-                                <a href={`/artist/${credit.artist.id}`}><b>{credit.name}</b></a>
+                                <a href={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></a>
                             </td>
                         </tr>
                         <tr>
                             <td>Released:</td>
-                            <td>{album['first-release-date']}</td>
+                            <td>{data.album.releaseDate}</td>
                         </tr>
                         <tr>
-                            <td>Rating: {album.rating && album.rating}</td>
+                            <td>Rating: {data.album.rating && data.album.rating}</td>
                         </tr>
                         </tbody>
                     </table>
-                    {album.reviews.map(r => {
-                        return <Review hideAlbum={true} key={r.id} album={album} review={r} />
+                    {data.reviews.map(r => {
+                        return <Review hideAlbum={true} key={r.id} album={data.album} review={r} />
                     })}
                 </div>
             </div>
