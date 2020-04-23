@@ -1,6 +1,9 @@
 package com.steven.hicks.models.artist;
 
+import com.steven.hicks.models.album.Album;
+
 import javax.persistence.*;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -8,17 +11,23 @@ import java.util.Objects;
 public class Artist {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private String id;
+
+    @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER)
+//    @JsonManagedReference
+    private List<Album> albums;
 
     private String name;
-    private String summary;
-    private String content;
-    private String mbid;
+    private String disambiguation;
+    private String area;
+    private String country;
+    private String beginDate;
+    private String beginArea;
+    private String beginAreaId;
 
     @Override
     public String toString() {
-        return String.format("Artist %s %d", name, id);
+        return String.format("Artist %s %s", name, id);
     }
 
     @Override
@@ -34,12 +43,45 @@ public class Artist {
         return Objects.hash(id);
     }
 
-    public int getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
+    }
+
+    public String getBeginArea() {
+        return beginArea;
+    }
+
+    public void setBeginArea(String beginArea) {
+        this.beginArea = beginArea;
+    }
+
+    public String getBeginDate() {
+        return beginDate;
+    }
+
+    public void setBeginDate(String beginDate) {
+        this.beginDate = beginDate;
+    }
+
+    public String getArea() {
+        return area;
+    }
+
+    public void setArea(String area) {
+        this.area = area;
+    }
+
+    public String getCountry() {
+        return country;
+    }
+
+    public void setCountry(String country) {
+        this.country = country;
     }
 
     public String getName() {
@@ -50,27 +92,28 @@ public class Artist {
         this.name = name;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getDisambiguation() {
+        return disambiguation;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setDisambiguation(String disambiguation) {
+        this.disambiguation = disambiguation;
     }
 
-    public String getContent() {
-        return content;
+    public String getBeginAreaId() {
+        return beginAreaId;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setBeginAreaId(String beginAreaId) {
+        this.beginAreaId = beginAreaId;
     }
 
-    public String getMbid() {
-        return mbid;
+    public List<Album> getAlbums() {
+        return albums;
     }
 
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
+    public void setAlbums(List<Album> albums) {
+        this.albums = albums;
     }
+
 }

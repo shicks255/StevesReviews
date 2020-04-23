@@ -1,8 +1,11 @@
 package com.steven.hicks.models.album;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.steven.hicks.models.Track;
 import com.steven.hicks.models.artist.Artist;
+
 import javax.persistence.*;
-import java.time.LocalDate;
+import java.util.List;
 import java.util.Objects;
 
 @Entity
@@ -10,27 +13,29 @@ import java.util.Objects;
 public class Album {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private int id;
+    private String id = "";
 
-    private String name;
+    private String title = "";
 
     @ManyToOne
     @JoinColumn(name = "artist_id")
+//    @JsonBackReference
+//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    @JsonIgnore
     private Artist artist;
 
-    private String mbid;
-    private String url;
-
     @Column(name = "release_date")
-    private LocalDate releaseDate;
+    private String releaseDate = "";
+    private String disambiguation = "";
+    private String type = "";
+    private String secondaryType = "";
 
-    private String summary;
-    private String content;
+    @OneToMany(mappedBy = "album")
+    private List<Track> tracks;
 
     @Override
     public String toString() {
-        return String.format("Album %s %d", name, id);
+        return String.format("Album %s %s", title, id);
     }
 
     @Override
@@ -38,7 +43,7 @@ public class Album {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Album album = (Album) o;
-        return id == album.id;
+        return id.equals(album.id);
     }
 
     @Override
@@ -46,20 +51,20 @@ public class Album {
         return Objects.hash(id);
     }
 
-    public int getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getTitle() {
+        return title;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Artist getArtist() {
@@ -70,43 +75,43 @@ public class Album {
         this.artist = artist;
     }
 
-    public String getMbid() {
-        return mbid;
-    }
-
-    public void setMbid(String mbid) {
-        this.mbid = mbid;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public LocalDate getReleaseDate() {
+    public String getReleaseDate() {
         return releaseDate;
     }
 
-    public void setReleaseDate(LocalDate releaseDate) {
+    public void setReleaseDate(String releaseDate) {
         this.releaseDate = releaseDate;
     }
 
-    public String getSummary() {
-        return summary;
+    public String getDisambiguation() {
+        return disambiguation;
     }
 
-    public void setSummary(String summary) {
-        this.summary = summary;
+    public void setDisambiguation(String disambiguation) {
+        this.disambiguation = disambiguation;
     }
 
-    public String getContent() {
-        return content;
+    public String getType() {
+        return type;
     }
 
-    public void setContent(String content) {
-        this.content = content;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getSecondaryType() {
+        return secondaryType;
+    }
+
+    public void setSecondaryType(String secondaryType) {
+        this.secondaryType = secondaryType;
+    }
+
+    public List<Track> getTracks() {
+        return tracks;
+    }
+
+    public void setTracks(List<Track> tracks) {
+        this.tracks = tracks;
     }
 }

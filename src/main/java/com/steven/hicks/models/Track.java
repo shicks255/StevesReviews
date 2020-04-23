@@ -1,5 +1,6 @@
 package com.steven.hicks.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.steven.hicks.models.album.Album;
 
 import javax.persistence.*;
@@ -12,19 +13,24 @@ import java.util.Objects;
 public class Track implements Serializable {
 
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    long id;
+
     @ManyToOne
     @JoinColumn(name = "album_id")
+    @JsonIgnore
     private Album album;
 
-    @Id
-    private BigDecimal rank;
+    private String number;
+    private Integer position;
+    private Integer disc;
 
-    private String name;
-    private BigDecimal duration;
+    private String title;
+    private Long length;
 
     @Override
     public String toString() {
-        return String.format("Track %d - %s", rank, name);
+        return String.format("Track %d - %s", number, title);
     }
 
     @Override
@@ -33,12 +39,12 @@ public class Track implements Serializable {
         if (o == null || getClass() != o.getClass()) return false;
         Track track = (Track) o;
         return album.equals(track.album) &&
-                rank.equals(track.rank);
+                number.equals(track.number);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(album, rank);
+        return Objects.hash(album, number);
     }
 
     public Album getAlbum() {
@@ -49,27 +55,51 @@ public class Track implements Serializable {
         this.album = album;
     }
 
-    public BigDecimal getRank() {
-        return rank;
+    public String getNumber() {
+        return number;
     }
 
-    public void setRank(BigDecimal rank) {
-        this.rank = rank;
+    public void setNumber(String number) {
+        this.number = number;
     }
 
-    public String getName() {
-        return name;
+    public Integer getPosition() {
+        return position;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPosition(Integer position) {
+        this.position = position;
     }
 
-    public BigDecimal getDuration() {
-        return duration;
+    public String getTitle() {
+        return title;
     }
 
-    public void setDuration(BigDecimal duration) {
-        this.duration = duration;
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public Long getLength() {
+        return length;
+    }
+
+    public void setLength(Long length) {
+        this.length = length;
+    }
+
+    public long getId() {
+        return id;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public Integer getDisc() {
+        return disc;
+    }
+
+    public void setDisc(Integer disc) {
+        this.disc = disc;
     }
 }

@@ -3,7 +3,7 @@ package com.steven.hicks.models.album;
 import javax.persistence.*;
 import java.util.Objects;
 
-@Entity
+//@Entity
 @Table(name = "album_images")
 public class AlbumImage {
 
@@ -21,7 +21,8 @@ public class AlbumImage {
 
     @Override
     public String toString() {
-        return String.format("AlbumImage %d %s", id, album.getName());
+//        return String.format("AlbumImage %d %s", id, album.tit());
+        return "";
     }
 
     @Override
