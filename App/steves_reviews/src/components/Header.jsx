@@ -53,7 +53,7 @@ export default function Header() {
                             <a href="@controllers.routes.UserController.logout()">Logout</a>
                         </div>
                         <div className="navbar-item">
-                            <a href="@controllers.routes.UserController.loginHome()">Login/Register</a>
+                            <a href="/login">Login/Register</a>
                         </div>
                     </div>
                     <div className="navbar-end">

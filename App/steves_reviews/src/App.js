@@ -9,6 +9,7 @@ import ArtistSearch from "./components/ArtistSearch";
 import ArtistPage from "./components/ArtistPage";
 import ArtistSearchResults from "./components/ArtistSearchResults";
 import AlbumPage from "./components/AlbumPage";
+import Login from "./components/Login";
 
 export default function App() {
 
@@ -22,6 +23,7 @@ export default function App() {
                 <Route path='/topRated' component={TopRated} />
                 <Route path='/artist/:id' component={ArtistPage} />
                 <Route path='/album/:id' component={AlbumPage} />
+                <Route path='/login' component={Login} />
             </Switch>
             <Footer/>
         </div>
