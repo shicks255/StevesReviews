@@ -5,8 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.models.Review;
+import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.models.dtos.ReviewWithAlbum;
+import com.steven.hicks.repositories.AlbumRepository;
 import com.steven.hicks.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -19,6 +21,8 @@ public class ReviewService {
 
     @Autowired
     ReviewRepository m_reviewRepository;
+    @Autowired
+    AlbumRepository m_albumRepository;
 
     private ObjectMapper m_objectMapper = new ObjectMapper();
     private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
@@ -52,6 +56,30 @@ public class ReviewService {
                 .collect(Collectors.toList());
 
         return reviews;
+    }
+
+    public List<ReviewWithAlbum> getReviewsByUser(int userId) {
+        List<Review> reviews = m_reviewRepository.findAllByUserId(userId);
+
+        List<ReviewWithAlbum> rwa = reviews.stream()
+                .map(r -> {
+                    Album album = m_albumRepository.getOne(r.getAlbumId());
+                    try
+                    {
+                        String albumNode = m_objectMapper.writeValueAsString(album);
+                        String reviewNode = m_objectMapper.writeValueAsString(r);
+
+                        return new ReviewWithAlbum(
+                                m_objectMapper.readTree(albumNode),
+                                m_objectMapper.readTree(reviewNode)
+                        );
+                    } catch (JsonProcessingException e) {
+                        e.printStackTrace();
+                    }
+                    return null;
+                })
+                .collect(Collectors.toList());
+        return rwa;
     }
 
     public Double getAverageRating(String albumId) {
