@@ -18,11 +18,11 @@ export default function AlbumPage(props) {
         data.album.tracks.forEach(x => discs.add(x.disc));
         setDiscs([...discs]);
 
+        setLoading(false);
+
         const data2 = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
         const json = await data2.json();
         setImage(json.images[0].image);
-
-        setLoading(false);
     }
 
     useEffect(() => {

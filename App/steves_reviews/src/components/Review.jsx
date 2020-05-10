@@ -3,7 +3,7 @@ import NoImage from '../images/no-album-cover.png';
 
 
 export default function Review(props) {
-    const {review, album} = props;
+    const {review, album, artist} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [image, setImage] = useState(NoImage);
 
@@ -23,7 +23,7 @@ export default function Review(props) {
         contentColumnClass = 'is-three-quarters';
         imageStuff =
             <div className="column is-one-quarter">
-            <a href={`/artist/${album['artist-credit'][0].artist.id}`}><b>{album['artist-credit'][0].name}</b></a>
+            <a href={`/artist/${artist.id}`}><b>{artist.name}</b></a>
             <figure className="image is-128x128">
                 {/*<a href="@controllers.routes.AlbumController.albumHome(r.album.id)">*/}
                 <a href='/'>
@@ -46,7 +46,7 @@ export default function Review(props) {
                             Rating: {review.rating}
                         </span>
                         <br/>
-                        {review.addedOn}
+                        {review.addedOn.monthValue + '/' + review.addedOn.dayOfMonth + '/' + review.addedOn.year}
                     </div>
                     <br/>
                     <div>

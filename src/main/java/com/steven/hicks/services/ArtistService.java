@@ -40,8 +40,8 @@ public class ArtistService {
             JsonNode artistWithImages = m_mbArtistSearcher.getArtistWithImages(mbid, FAN_ART_KEY);
             System.out.println(artistWithImages);
             String area = artistWithImages.get("area").get("name").asText();
-            String beginArea = artistWithImages.get("begin_area").get("name").asText();
-            String beginAreaId = artistWithImages.get("begin-area").get("id").asText();
+            String beginArea = artistWithImages.get("begin_area").isEmpty() ? "" : artistWithImages.get("begin_area").get("name").asText();
+            String beginAreaId = artistWithImages.get("begin-area").isEmpty() ? "" : artistWithImages.get("begin_area").get("id").asText();
             String beginDate = artistWithImages.get("life-span").get("begin").asText();
             String country = artistWithImages.get("country").asText();
             String dis = artistWithImages.get("disambiguation").asText();

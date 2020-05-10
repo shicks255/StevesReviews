@@ -6,9 +6,11 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.album.Album;
+import com.steven.hicks.models.artist.Artist;
 import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.models.dtos.ReviewWithAlbum;
 import com.steven.hicks.repositories.AlbumRepository;
+import com.steven.hicks.repositories.ArtistRepository;
 import com.steven.hicks.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -23,6 +25,8 @@ public class ReviewService {
     ReviewRepository m_reviewRepository;
     @Autowired
     AlbumRepository m_albumRepository;
+    @Autowired
+    ArtistRepository m_artistRepository;
 
     private ObjectMapper m_objectMapper = new ObjectMapper();
     private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
@@ -36,9 +40,17 @@ public class ReviewService {
         List<ReviewWithAlbum> albumsWithReview = reviews.stream().map(x -> {
             try
             {
-                String review = m_objectMapper.writeValueAsString(x);
-                JsonNode album = m_mbAlbumSearcher.getAlbum(x.getAlbumId());
-                return new ReviewWithAlbum(album, m_objectMapper.readTree(review));
+                Album album = m_albumRepository.findById(x.getAlbumId()).get();
+                Artist artist = album.getArtist();
+                String albumNode = m_objectMapper.writeValueAsString(album);
+                String reviewNode = m_objectMapper.writeValueAsString(x);
+                String artistNode = m_objectMapper.writeValueAsString(artist);
+
+                return new ReviewWithAlbum(
+                        m_objectMapper.readTree(albumNode),
+                        m_objectMapper.readTree(reviewNode),
+                        m_objectMapper.readTree(artistNode)
+                );
             } catch (JsonProcessingException | NullPointerException e)
             {
                 e.printStackTrace();
@@ -63,15 +75,18 @@ public class ReviewService {
 
         List<ReviewWithAlbum> rwa = reviews.stream()
                 .map(r -> {
-                    Album album = m_albumRepository.getOne(r.getAlbumId());
+                    Album album = m_albumRepository.findById(r.getAlbumId()).get();
+                    Artist artist = album.getArtist();
                     try
                     {
                         String albumNode = m_objectMapper.writeValueAsString(album);
                         String reviewNode = m_objectMapper.writeValueAsString(r);
+                        String artistNode = m_objectMapper.writeValueAsString(artist);
 
                         return new ReviewWithAlbum(
                                 m_objectMapper.readTree(albumNode),
-                                m_objectMapper.readTree(reviewNode)
+                                m_objectMapper.readTree(reviewNode),
+                                m_objectMapper.readTree(artistNode)
                         );
                     } catch (JsonProcessingException e) {
                         e.printStackTrace();
