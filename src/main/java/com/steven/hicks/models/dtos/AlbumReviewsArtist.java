@@ -1,5 +1,6 @@
 package com.steven.hicks.models.dtos;
 
+import com.steven.hicks.models.Review;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.artist.Artist;
 
@@ -11,12 +12,14 @@ public class AlbumReviewsArtist {
     private List<ReviewDTO> m_reviews;
     private Double rating;
     private Album m_album;
+    private ReviewDTO m_loggedInUserReview;
 
-    public AlbumReviewsArtist(Artist artist, List<ReviewDTO> reviews, Double rating, Album album) {
+    public AlbumReviewsArtist(Artist artist, List<ReviewDTO> reviews, Double rating, Album album, ReviewDTO userReview) {
         m_artist = artist;
         m_reviews = reviews;
         this.rating = rating;
         m_album = album;
+        this.m_loggedInUserReview = userReview;
     }
 
     public Artist getArtist() {
@@ -49,5 +52,13 @@ public class AlbumReviewsArtist {
 
     public void setAlbum(Album album) {
         m_album = album;
+    }
+
+    public ReviewDTO getLoggedInUserReview() {
+        return m_loggedInUserReview;
+    }
+
+    public void setLoggedInUserReview(ReviewDTO loggedInUserReview) {
+        m_loggedInUserReview = loggedInUserReview;
     }
 }

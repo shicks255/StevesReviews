@@ -71,7 +71,10 @@ public class ReviewService {
     }
 
     public List<ReviewWithAlbum> getReviewsByUser(int userId) {
-        List<Review> reviews = m_reviewRepository.findAllByUserId(userId);
+        List<ReviewDTO> reviews = m_reviewRepository.findAllByUserId(userId)
+                .stream()
+                .map(x -> new ReviewDTO(x))
+                .collect(Collectors.toList());
 
         List<ReviewWithAlbum> rwa = reviews.stream()
                 .map(r -> {

@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import Review from "./Review";
+import AddEditReview from "./AddEditReview";
 
 export default function AlbumPage(props) {
 
@@ -17,7 +18,7 @@ export default function AlbumPage(props) {
         let discs = new Set();
         data.album.tracks.forEach(x => discs.add(x.disc));
         setDiscs([...discs]);
-
+        console.log(data);
         setLoading(false);
 
         const data2 = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
@@ -108,6 +109,7 @@ export default function AlbumPage(props) {
                         </tr>
                         </tbody>
                     </table>
+                    <AddEditReview review={data.loggedInUserReview}/>
                     {data.reviews.map(r => {
                         return <Review hideAlbum={true} key={r.id} album={data.album} review={r} />
                     })}

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.Track;
+import com.steven.hicks.models.User;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.artist.Artist;
 import com.steven.hicks.models.dtos.AlbumReviewsArtist;
@@ -14,6 +15,7 @@ import com.steven.hicks.repositories.ArtistRepository;
 import com.steven.hicks.repositories.TrackRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -96,7 +98,18 @@ public class AlbumService {
         List<ReviewDTO> reviews = m_reviewService.getReviewsForAlbum(albumId);
         Double rating = m_reviewService.getAverageRating(albumId);
 
-        return new AlbumReviewsArtist(artist, reviews, rating, album);
+        if (SecurityContextHolder.getContext().getAuthentication().getPrincipal() instanceof User) {
+            User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+            ReviewDTO userReview = reviews.stream()
+                    .filter(x -> x.getUser().equals(user))
+                    .findFirst()
+                    .orElse(null);
+            if (userReview != null)
+                reviews.removeIf(x -> x.getId() == userReview.getId());
+            return new AlbumReviewsArtist(artist, reviews, rating, album, userReview);
+        }
+
+        return new AlbumReviewsArtist(artist, reviews, rating, album, null);
     }
 
     public List<AlbumWithReviewDTO> getTopRated() {
