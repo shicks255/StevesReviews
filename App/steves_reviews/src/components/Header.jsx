@@ -1,13 +1,20 @@
-import React from 'react';
+import React, {useContext, useEffect, useState} from 'react';
+import { UserContext } from "./UserContext";
+import { Link } from 'react-router-dom';
 import Logo from '../images/StevesMusicReviews.png';
 
 export default function Header() {
 
-    document.addEventListener('DOMContentLoaded', function(){
+    const context = useContext(UserContext);
+
+    document.addEventListener('DOMContentLoaded', function ()
+    {
         var $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
         if ($navbarBurgers.length > 0) {
-            $navbarBurgers.forEach( function(el){
-                el.addEventListener('click', function() {
+            $navbarBurgers.forEach(function (el)
+            {
+                el.addEventListener('click', function ()
+                {
                     var target = el.dataset.target;
                     var $target = document.getElementById(target);
 
@@ -18,20 +25,26 @@ export default function Header() {
         }
     });
 
+    function logout()
+    {
+        document.cookie = "sreviews=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+        window.location = "/";
+    }
+
     return (
         <header>
             <nav className="navbar is-light" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                     <div className="navbar-item">
-                        <a href="/">
+                        <Link to="/">
                             <figure className="image">
-                                <img alt="stevesreviews.net" src={Logo} />
+                                <img alt="stevesreviews.net" src={Logo}/>
                             </figure>
-                        </a>
+                        </Link>
                     </div>
 
                     <button className="navbar-burger" aria-label="menu" aria-expanded="false"
-                       data-target="navbarLinks">
+                            data-target="navbarLinks">
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
                         <span aria-hidden="true"></span>
@@ -40,21 +53,28 @@ export default function Header() {
                 <div id="navbarLinks" className="navbar-menu">
                     <div className="navbar-start is-light">
                         <div className="navbar-item">
-                            <a href="/search">Search for artist</a>
+                            <Link to="/search">Search for artist</Link>
                         </div>
                         <div className="navbar-item">
-                            <a href="/topRated">Top Rated</a>
+                            <Link to="/topRated">Top Rated</Link>
                         </div>
                         {/*@if(session.get("userId").nonEmpty) {*/}
+                        {!context.loggedIn &&
                         <div className="navbar-item">
-                            <a href="@controllers.routes.UserController.userHome()">My Account</a>
+                            <Link to="/login">Login/Register</Link>
                         </div>
-                        < div className="navbar-item">
-                            <a href="@controllers.routes.UserController.logout()">Logout</a>
-                        </div>
-                        <div className="navbar-item">
-                            <a href="/login">Login/Register</a>
-                        </div>
+                        }
+                        {context.loggedIn &&
+                        <>
+                            <div className="navbar-item">
+                                {/*<a onClick={ensureLoggedIn} >My Account</a>*/}
+                                <Link to={'/myAccount'}>My Account</Link>
+                            </div>
+                            <div className="navbar-item">
+                                <button onClick={logout}>Logout</button>
+                            </div>
+                        </>
+                        }
                     </div>
                     <div className="navbar-end">
                         <div className="navbar-item">
@@ -63,7 +83,7 @@ export default function Header() {
                     </div>
                 </div>
 
-                <hr className="navbar-divider" />
+                <hr className="navbar-divider"/>
             </nav>
         </header>
     );

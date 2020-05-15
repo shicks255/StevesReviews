@@ -1,9 +1,10 @@
 import React, {useEffect, useState} from 'react';
+import { Link } from 'react-router-dom';
 import NoImage from '../images/no-album-cover.png';
 
 
 export default function Review(props) {
-    const {review, album, artist} = props;
+    const {review, album, artist, rating} = props;
     const [collapsed, setCollapsed] = useState(true);
     const [image, setImage] = useState(NoImage);
 
@@ -23,14 +24,14 @@ export default function Review(props) {
         contentColumnClass = 'is-three-quarters';
         imageStuff =
             <div className="column is-one-quarter">
-            <a href={`/artist/${artist.id}`}><b>{artist.name}</b></a>
+            <Link to={`/artist/${artist.id}`}><b>{artist.name}</b></Link>
             <figure className="image is-128x128">
                 {/*<a href="@controllers.routes.AlbumController.albumHome(r.album.id)">*/}
                 <a href='/'>
                     <img alt='myimage' src={image}/>
                 </a>
             </figure>
-            <a href={`/album/${album.id}`}>{album.title}</a>
+            <Link to={`/album/${album.id}`}>{album.title}</Link>
         </div>
     }
 
@@ -43,10 +44,10 @@ export default function Review(props) {
                         <a href="@routes.UserController.userHome2(r.user.id)">{review.user.username}</a>
                         <br/>
                         <span className={`tag ${review.colorClass}`}>
-                            Rating: {review.rating}
+                            Rating: {rating ? rating : review.rating}
                         </span>
                         <br/>
-                        {review.addedOn.monthValue + '/' + review.addedOn.dayOfMonth + '/' + review.addedOn.year}
+                        {review.addedOn}
                     </div>
                     <br/>
                     <div>

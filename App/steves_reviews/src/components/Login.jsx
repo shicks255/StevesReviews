@@ -1,18 +1,14 @@
-import React from 'react';
+import React, {useContext} from 'react';
+import {UserContext} from "./UserContext";
 
-export default function Login() {
+export default function Login(props) {
 
     async function login(e) {
         e.preventDefault();
-        console.log(e.target.username.value);
-        console.log(e.target.password.value);
-
         const body = {
             'username': e.target.username.value,
             'password': e.target.password.value,
         }
-
-        console.log(JSON.stringify(body));
 
         const result = await fetch("/auth/login", {
             method: 'POST',
@@ -21,17 +17,26 @@ export default function Login() {
             },
             body: JSON.stringify(body)
         });
-        console.log(result);
-        console.log(result.body);
-        console.log('you have logged in :)');
+        const response = await result.text();
+
+        if (result.status === 200) {
+            const cookie = response;
+            let date = new Date();
+            date.setTime(date.getTime()+(30*24*60*60*1000));
+            document.cookie = "sreviews=" + cookie + "; expires=" + date.toGMTString();
+            if (props.continueTo)
+                window.location = props.continueTo;
+            window.location = '/';
+        }
+        else {
+            //if no good login do a modal saying invalid usern
+        }
 
     }
 
     return (
         <div>
-
             <form onSubmit={login}>
-
                 <input type='text' id='username'></input>
                 <label>Username</label>
                 <br/>
@@ -39,9 +44,7 @@ export default function Login() {
                 <label>Password</label>
 
                 <button type='submit'>Login</button>
-
             </form>
-
         </div>
     )
 

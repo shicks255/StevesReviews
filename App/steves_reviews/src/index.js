@@ -4,11 +4,14 @@ import { BrowserRouter } from "react-router-dom";
 import './index.css';
 import 'bulma/css/bulma.min.css';
 import App from './App';
+import { UserContextProvider } from "./components/UserContext";
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
     <BrowserRouter>
-        <App />
+        <UserContextProvider>
+            <App />
+        </UserContextProvider>
     </BrowserRouter>,
     document.getElementById('root')
 );

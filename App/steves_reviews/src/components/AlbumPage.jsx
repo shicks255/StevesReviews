@@ -1,6 +1,8 @@
-import React, {useEffect, useState} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import Review from "./Review";
 import AddEditReview from "./AddEditReview";
+import { UserContext } from "./UserContext";
+import { Link } from 'react-router-dom';
 
 export default function AlbumPage(props) {
 
@@ -10,32 +12,39 @@ export default function AlbumPage(props) {
     const [data, setData] = useState({});
     const [discs, setDiscs] = useState([]);
 
+    const context = useContext(UserContext);
+    const cookie = context.cookie;
+
+    useEffect(() => {
+        getAlbumAndArtistAndImage();
+    }, [cookie]);
+
     async function getAlbumAndArtistAndImage() {
-        const result = await fetch(`/album/${id}`);
+        const result = await fetch(`/album/${id}`, {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + cookie
+            }
+        });
         const data = await result.json();
         setData(data);
+        console.log(data);
 
         let discs = new Set();
         data.album.tracks.forEach(x => discs.add(x.disc));
         setDiscs([...discs]);
-        console.log(data);
         setLoading(false);
 
-        const data2 = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
-        const json = await data2.json();
-        setImage(json.images[0].image);
+        const imageData = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
+        const imageJson = await imageData.json();
+        setImage(imageJson.images[0].image);
     }
-
-    useEffect(() => {
-        getAlbumAndArtistAndImage();
-    }, []);
 
     function getTimeStamp(millis) {
         const totalSeconds = (millis/1000);
         const minutes = Math.floor(totalSeconds/60);
         const left = totalSeconds - (minutes*60);
         const seconds = Math.round(left);
-
         return minutes + ":" + seconds;
     }
 
@@ -47,10 +56,10 @@ export default function AlbumPage(props) {
             <nav className="breadcrumb" aria-label="breadcrumbs">
                 <ul>
                     <li>
-                        <a href={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></a>
+                        <Link to={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></Link>
                     </li>
                     <li className="is-active">
-                        <a href="#" aria-current="page">{data.album.title}</a>
+                        <Link to="#" aria-current="page">{data.album.title}</Link>
                     </li>
                 </ul>
             </nav>
@@ -97,7 +106,7 @@ export default function AlbumPage(props) {
                         </tr>
                         <tr>
                             <td colSpan="2">
-                                <a href={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></a>
+                                <Link to={`/artist/${data.artist.id}`}><b>{data.artist.name}</b></Link>
                             </td>
                         </tr>
                         <tr>
@@ -105,7 +114,7 @@ export default function AlbumPage(props) {
                             <td>{data.album.releaseDate}</td>
                         </tr>
                         <tr>
-                            <td>Rating: {data.album.rating && data.album.rating}</td>
+                            <td>Rating: {data.rating}</td>
                         </tr>
                         </tbody>
                     </table>

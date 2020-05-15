@@ -1,19 +1,37 @@
-import React from 'react';
-
+import React, {useContext} from 'react';
+import {UserContext} from "./UserContext";
 
 export default function AddEditReview(props) {
     const review = props.review;
-    console.log(review);
+    const context = useContext(UserContext);
 
     function submitForm(e) {
         e.preventDefault();
-        console.log(e.target);
+
+        const content = e.target.content.value;
+        const rating = e.target.rating.value;
+        const id = review ? review.id : null;
+
+        const body = {
+            'content': content,
+            'rating': rating,
+            'id': id
+        }
+
+        const result = fetch('/review/update', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + context.cookie
+            },
+            body: JSON.stringify(body)
+        });
     }
 
     return (
         <div>
             <form onSubmit={submitForm}>
-                <select value={review.rating}>
+                <select id='rating' value={review ? review.rating : 1}>
                     <option>1</option>
                     <option>1.5</option>
                     <option>2</option>
@@ -25,15 +43,11 @@ export default function AddEditReview(props) {
                     <option>5</option>
                 </select>
                 <br/>
-                <textarea>
-                    {review ? review.content : ''}
-                </textarea>
+                <textarea id='content' value={review ? review.content : ''} />
 
                 <br/>
                 <button type='submit'>{review ? 'Update' : 'Create'}</button>
-
             </form>
-
         </div>
     );
 

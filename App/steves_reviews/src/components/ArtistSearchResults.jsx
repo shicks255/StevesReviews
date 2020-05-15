@@ -10,7 +10,6 @@ export default function ArtistSearchResults(props) {
     async function searchArtists() {
         const data = await fetch(`/artist/search/${search}`);
         const artistResults = await data.json();
-        console.log(artistResults);
         setArtists(artistResults);
         setLoading(false);
     }
@@ -35,7 +34,6 @@ export default function ArtistSearchResults(props) {
                 </tr>
 
                 {artists.map(a => {
-                    console.log(a);
                     return (
                         <tr key={a.id}>
                             <td>
