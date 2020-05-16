@@ -25,12 +25,15 @@ public class Review {
     @Column(name = "added_on")
     private LocalDateTime addedOn;
 
+    @Column(name = "last_updated")
+    private LocalDateTime lastUpdated;
+
     private String content;
     private float rating;
 
     @Override
     public String toString() {
-        return String.format("Review %s", user.getUsername());
+        return String.format("Review ");
     }
 
     @Override
@@ -101,5 +104,13 @@ public class Review {
 
     public void setRating(float rating) {
         this.rating = rating;
+    }
+
+    public LocalDateTime getLastUpdated() {
+        return lastUpdated;
+    }
+
+    public void setLastUpdated(LocalDateTime lastUpdated) {
+        this.lastUpdated = lastUpdated;
     }
 }

@@ -15,6 +15,7 @@ import com.steven.hicks.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -106,5 +107,13 @@ public class ReviewService {
 
     public Review findFirstByAlbumIdOrderByRatingDesc(String albumId) {
         return m_reviewRepository.findFirstByAlbumIdOrderByRatingDesc(albumId);
+    }
+
+    public void updateReview(Review review) {
+        m_reviewRepository.update(review.getContent(), review.getRating(), LocalDateTime.now(), review.getId());
+    }
+
+    public void saveReview(Review review) {
+        m_reviewRepository.save(review);
     }
 }

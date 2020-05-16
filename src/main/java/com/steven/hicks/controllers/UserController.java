@@ -2,13 +2,13 @@ package com.steven.hicks.controllers;
 
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.dtos.UserStats;
+import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.services.StatsService;
 import com.steven.hicks.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
 
 @RestController
 @RequestMapping("/user")
@@ -18,21 +18,36 @@ public class UserController {
     UserService m_userService;
     @Autowired
     StatsService m_statsService;
+    @Autowired
+    JwtTokenService m_jwtTokenService;
 
     @GetMapping()
-    public User getLoggedInUser() {
-        User user = (User)SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    public User getUser(HttpServletRequest request) {
+        User user = m_jwtTokenService.getUserFromToken(request);
         return user;
     }
 
-    @GetMapping("/stats")
-    public UserStats getUserStats() {
-        Object user = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+    @GetMapping("/{userId}")
+    public User getUser(@PathVariable int userId) {
+        User user = m_userService.findById(userId);
+        return user;
+    }
 
-        User u = (User)user;
-
-        UserStats stats = m_statsService.getUserStats(u.getId());
+    @GetMapping("/stats/{userId}")
+    public UserStats getUserStats(@PathVariable int userId) {
+        UserStats stats = m_statsService.getUserStats(userId);
         return stats;
     }
 
+    @GetMapping("/stats")
+    public UserStats getUserStats(HttpServletRequest request) {
+        User user = m_jwtTokenService.getUserFromToken(request);
+        UserStats userStats = m_statsService.getUserStats(user.getId());
+        return userStats;
+    }
+
+    @PostMapping("/register")
+    public void register(@RequestBody User user) {
+        m_userService.registerUser(user);
+    }
 }

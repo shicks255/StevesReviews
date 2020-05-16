@@ -12,6 +12,7 @@ import AlbumPage from "./components/AlbumPage";
 import Login from "./components/Login";
 import MyAccount from "./components/MyAccount";
 import AuthRoute from "./components/AuthRoute";
+import UserPage from "./components/UserPage";
 
 export default function App() {
 
@@ -26,8 +27,8 @@ export default function App() {
                 <Route path='/artist/:id' component={ArtistPage} />
                 <Route path='/album/:id' component={AlbumPage} />
                 <Route path='/login' component={Login} />
-                {/*<Route path='/myAccount' component={MyAccount} />*/}
-                <AuthRoute path='/myAccount' component={MyAccount}/>
+                <Route path='/user/:id' component={UserPage} />
+                <AuthRoute path='/myAccount' component={MyAccount} />
             </Switch>
             <Footer/>
         </div>
