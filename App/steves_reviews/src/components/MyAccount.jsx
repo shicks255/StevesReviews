@@ -1,6 +1,7 @@
 import React, {useContext, useEffect, useState} from 'react';
 import Review from "./Review";
 import {UserContext} from "./UserContext";
+import UserStats from "./UserStats";
 
 export default function MyAccount(props) {
 
@@ -67,38 +68,7 @@ export default function MyAccount(props) {
                     </div>
                 </article>
 
-                <article className="message">
-                    <div className="message-header">
-                        {user.username}
-                    </div>
-                    <div className="message-body">
-                        <table className="table">
-                            <tbody>
-                            <tr>
-                                <td>Reviews:</td>
-                                <td>{userStats.reviews}</td>
-                            </tr>
-                            <tr>
-                                <td>5-Star Reviews:</td>
-                                <td>{userStats.fiveStarReviews}</td>
-                            </tr>
-                            <tr>
-                                <td>Average Rating:</td>
-                                <td>{userStats.averageRating}</td>
-                            </tr>
-                            <tr>
-                                <td>Average Review Length:</td>
-                                <td>{userStats.averageReviewLength} words</td>
-                            </tr>
-                            <tr>
-                                <td>Last Review:</td>
-                                <td>{userStats.lastReview}</td>
-                            </tr>
-                            </tbody>
-
-                        </table>
-                    </div>
-                </article>
+                <UserStats user={user} userStats={userStats} />
             </div>
 
             <div className='column is-two-thirds'>

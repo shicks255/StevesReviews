@@ -26,10 +26,9 @@ export default function Review(props) {
             <div className="column is-one-quarter">
             <Link to={`/artist/${artist.id}`}><b>{artist.name}</b></Link>
             <figure className="image is-128x128">
-                {/*<a href="@controllers.routes.AlbumController.albumHome(r.album.id)">*/}
-                <a href='/'>
+                <Link to={`/album/${album.id}`}>
                     <img alt='myimage' src={image}/>
-                </a>
+                </Link>
             </figure>
             <Link to={`/album/${album.id}`}>{album.title}</Link>
         </div>
@@ -41,7 +40,7 @@ export default function Review(props) {
                 {imageStuff}
                 <div className={`column ${contentColumnClass}`}>
                     <div className=''>
-                        <a href="@routes.UserController.userHome2(r.user.id)">{review.user.username}</a>
+                        <Link to={`user/${review.user.id}`}>{review.user.username}</Link>
                         <br/>
                         <span className={`tag ${review.colorClass}`}>
                             Rating: {rating ? rating : review.rating}
