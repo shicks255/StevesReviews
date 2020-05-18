@@ -71,7 +71,7 @@ export default function Header() {
                                 <Link to={'/myAccount'}>My Account</Link>
                             </div>
                             <div className="navbar-item">
-                                <button onClick={logout}>Logout</button>
+                                <button className='button is-link' onClick={logout}>Logout</button>
                             </div>
                         </>
                         }

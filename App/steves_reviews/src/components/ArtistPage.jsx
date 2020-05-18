@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
+import NoImage from '../images/no-album-cover.png';
 
 export default function ArtistPage(props) {
 
@@ -16,9 +17,10 @@ export default function ArtistPage(props) {
 
         const albums = await fetch(`/album/artist/${id}`);
         let albumsJson = await albums.json();
-        albumsJson.sort((a,b) => {
-            return a.releaseDate.localeCompare(b.releaseDate);
-        });
+        console.log(albumsJson);
+        // albumsJson.sort((a,b) => {
+        //     return a.releaseDate.localeCompare(b.releaseDate);
+        // });
 
         const types = new Set();
         albumsJson.forEach((e) => types.add(e.type));
@@ -48,7 +50,7 @@ export default function ArtistPage(props) {
                     <div className="card-image">
                         <div className="image">
                             <figure className="image is-512x512">
-                                {artist.images ? artist.images[0] ? <img src={artist.images[0][0]['#text']} /> : '' : ''}
+                                {artist.images ? artist.images[0] ? <img src={artist.images[0].url} /> : '' : ''}
                             </figure>
                         </div>
                         <div className="card-content">
@@ -90,8 +92,12 @@ function AlbumLine(props) {
 
     async function getImage() {
         const data = await fetch('http://coverartarchive.org/release-group/' + album.id);
-        const json = await data.json();
-        setImage(json.images[0].image);
+        if (data.status != 200)
+            setImage(NoImage);
+        else {
+            const json = await data.json();
+            setImage(json.images[0].image);
+        }
     }
 
     useEffect(() => {
@@ -102,13 +108,15 @@ function AlbumLine(props) {
         <tr key={album.id}>
             <td>
                 <figure className="image is-128x128">
-                    <img alt='image' src={image} />
+                    <Link to={`/album/${album.id}`}>
+                        <img alt='image' src={image} />
+                    </Link>
                 </figure>
             </td>
             <td>
                 <Link to={`/album/${album.id}`}>{album.title}</Link>
                 <br/>
-                {album.releaseDate.substring(0,4)}
+                {album.releaseDate ? album.releaseDate.substring(0,4) : ''}
             </td>
             <td>
                 <b>{album.rating && album.rating}</b>

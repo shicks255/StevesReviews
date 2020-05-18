@@ -1,5 +1,7 @@
 package com.steven.hicks.models.artist;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
@@ -9,8 +11,12 @@ public class ArtistImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "artist_id")
     private int id;
+
+    @ManyToOne
+    @JoinColumn(name = "artist_id")
+    @JsonIgnore
+    private Artist artist;
 
     private String text;
     private String url;
@@ -55,5 +61,13 @@ public class ArtistImage {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
     }
 }

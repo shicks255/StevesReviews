@@ -1,18 +1,16 @@
 package com.steven.hicks.models.dtos;
 
-import java.time.LocalDate;
-
 public class UserStats {
 
     private int reviews;
-    private long firstStarReviews;
+    private long fiveStarReviews;
     private float averageRating;
     private int averageReviewLength;
     private String lastReview;
 
-    public UserStats(int reviews, long firstStarReviews, float averageRating, int averageReviewLength, String lastReview) {
+    public UserStats(int reviews, long fiveStarReviews, float averageRating, int averageReviewLength, String lastReview) {
         this.reviews = reviews;
-        this.firstStarReviews = firstStarReviews;
+        this.fiveStarReviews = fiveStarReviews;
         this.averageRating = averageRating;
         this.averageReviewLength = averageReviewLength;
         this.lastReview = lastReview;
@@ -26,12 +24,12 @@ public class UserStats {
         this.reviews = reviews;
     }
 
-    public long getFirstStarReviews() {
-        return firstStarReviews;
+    public long getFiveStarReviews() {
+        return fiveStarReviews;
     }
 
-    public void setFirstStarReviews(long firstStarReviews) {
-        this.firstStarReviews = firstStarReviews;
+    public void setFiveStarReviews(long fiveStarReviews) {
+        this.fiveStarReviews = fiveStarReviews;
     }
 
     public float getAverageRating() {

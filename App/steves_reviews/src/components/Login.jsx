@@ -35,16 +35,43 @@ export default function Login(props) {
     }
 
     return (
-        <div>
-            <form onSubmit={login}>
-                <input type='text' id='username'></input>
-                <label>Username</label>
-                <br/>
-                <input type='text' id='password'></input>
-                <label>Password</label>
+        <div className='columns'>
+            <div className='column is-half is is-offset-one-quarter'>
+                <article className='message is-large'>
+                    <div className='message-header'>
+                        Login
+                    </div>
+                    <div className='message-body'>
+                        <form onSubmit={login}>
+                            <table>
+                                <tbody>
+                                <tr>
+                                    <td>
+                                        <label>Username</label>
+                                        <br/>
+                                        <input type='text' id='username'></input>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Password</label>
+                                        <br/>
+                                        <input type='password' id='password'></input>
+                                    </td>
+                                </tr>
 
-                <button type='submit'>Login</button>
-            </form>
+                                <tr>
+                                    <td>
+                                        <br/>
+                                        <button className='button is-link' type='submit'>Login</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                    </div>
+                </article>
+            </div>
         </div>
     )
 

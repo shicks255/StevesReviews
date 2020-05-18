@@ -17,6 +17,9 @@ public class Artist {
 //    @JsonManagedReference
     private List<Album> albums;
 
+    @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)
+    private List<ArtistImage> images;
+
     private String name;
     private String disambiguation;
     private String area;
@@ -116,4 +119,11 @@ public class Artist {
         this.albums = albums;
     }
 
+    public List<ArtistImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<ArtistImage> images) {
+        this.images = images;
+    }
 }

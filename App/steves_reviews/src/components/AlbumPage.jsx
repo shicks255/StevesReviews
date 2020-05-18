@@ -74,17 +74,16 @@ export default function AlbumPage(props) {
 
                     <table className="table is-hoverable is-narrow">
                         <tbody>
-                        <tr>
-                            <td colSpan="3"><b>Tracks</b></td>
+                        <tr className='subtitle is-4'>
+                            <td colSpan="3" className='has-text-centered'><b>Tracks</b></td>
                         </tr>
-                        </tbody>
-                    </table>
 
                     {discs.map(d => {
                         return (
-                            <table>
-                                <tbody>
-                                <tr><td colSpan={3}>{discs.length > 1 ? <b>Disc {d}</b> : ''}</td></tr>
+                            <>
+                                <tr>
+                                    <td colSpan={3}>{discs.length > 1 ? <b>Disc {d}</b> : ''}</td>
+                                </tr>
                                 {data.album.tracks.filter(tr => tr.disc == d).map(tr => {
                                     return <tr key={tr.id}>
                                         <td>{tr.number}</td>
@@ -92,17 +91,18 @@ export default function AlbumPage(props) {
                                         <td>{getTimeStamp(tr.length)}</td>
                                     </tr>
                                 })}
-                                </tbody>
-                            </table>
+                                </>
                         )
                     })}
+                        </tbody>
+                    </table>
                 </div>
 
                 <div className="column is-two-thirds">
-                    <table className="table is-narrow is-hoverable is-fullwidth">
+                    <table className="table is-hoverable is-fullwidth is-striped">
                         <tbody>
                         <tr>
-                            <td colSpan="2">{data.album.title}</td>
+                            <td colSpan="2" className='title is-4'>{data.album.title}</td>
                         </tr>
                         <tr>
                             <td colSpan="2">
@@ -110,15 +110,19 @@ export default function AlbumPage(props) {
                             </td>
                         </tr>
                         <tr>
-                            <td>Released:</td>
+                            <td style={{width: "50px"}}>Released:</td>
                             <td>{data.album.releaseDate}</td>
                         </tr>
                         <tr>
-                            <td>Rating: {data.rating}</td>
+                            <td>Rating: </td>
+                            <td>{data.rating}</td>
                         </tr>
                         </tbody>
                     </table>
-                    <AddEditReview review={data.loggedInUserReview}/>
+                    {context.loggedIn
+                        ? <AddEditReview review={data.loggedInUserReview}/>
+                        : 'Log in to leave a review'
+                    }
                     {data.reviews.map(r => {
                         return <Review hideAlbum={true} key={r.id} album={data.album} review={r} />
                     })}
