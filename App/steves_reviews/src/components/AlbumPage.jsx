@@ -35,7 +35,7 @@ export default function AlbumPage(props) {
         setDiscs([...discs]);
         setLoading(false);
 
-        const imageData = await fetch('http://coverartarchive.org/release-group/' + data.album.id);
+        const imageData = await fetch('https://coverartarchive.org/release-group/' + data.album.id);
         const imageJson = await imageData.json();
         setImage(imageJson.images[0].image);
     }

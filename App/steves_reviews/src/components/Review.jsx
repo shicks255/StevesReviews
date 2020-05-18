@@ -8,7 +8,7 @@ export default function Review(props) {
     const [image, setImage] = useState(NoImage);
 
     async function getImage(id) {
-        const result = await fetch('http://coverartarchive.org/release-group/' + id);
+        const result = await fetch('https://coverartarchive.org/release-group/' + id);
         const imageData = await result.json();
         setImage(imageData.images[0].image);
     }

@@ -33,3 +33,8 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+task copyJar(type: Copy) {
+    from "$buildDir/libs/StevesReviews-1.0-SNAPSHOT.jar"
+    into "Z:\\stevesReviews"
+}

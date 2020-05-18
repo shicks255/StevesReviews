@@ -91,7 +91,7 @@ function AlbumLine(props) {
     const [image, setImage] = useState('');
 
     async function getImage() {
-        const data = await fetch('http://coverartarchive.org/release-group/' + album.id);
+        const data = await fetch('https://coverartarchive.org/release-group/' + album.id);
         if (data.status != 200)
             setImage(NoImage);
         else {
