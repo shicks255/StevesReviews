@@ -18,7 +18,7 @@ export default function MyAccount(props) {
     }, []);
 
     async function fetchUserStats() {
-        const userStatsResult = await fetch('/user/stats', {
+        const userStatsResult = await fetch('/api/user/stats', {
             headers: {
                 'Authorization': 'Bearer ' + context.cookie
             }
@@ -28,7 +28,7 @@ export default function MyAccount(props) {
     }
 
     async function fetchUser() {
-        const userResult = await fetch('/user', {
+        const userResult = await fetch('/api/user', {
             headers: {
                 'Authorization': 'Bearer ' + context.cookie
             }
@@ -38,7 +38,7 @@ export default function MyAccount(props) {
     }
 
     async function fetchReviews() {
-        const reviewResult = await fetch('/review/user', {
+        const reviewResult = await fetch('/api/review/user', {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + context.cookie

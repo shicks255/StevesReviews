@@ -8,7 +8,7 @@ export default function TopRated() {
     const [albumsAndRatings, setAlbumsAndRatings] = useState([]);
 
     async function loadAlbumsAndRatings() {
-        const data = await fetch('/album/topRated')
+        const data = await fetch('/api/album/topRated')
         const albumsAndRatings = await data.json();
         setAlbumsAndRatings(albumsAndRatings);
     }

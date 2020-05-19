@@ -18,7 +18,7 @@ export default function AddEditReview(props) {
             'id': id
         }
 
-        const result = fetch('/review/update', {
+        const result = fetch('/api/review/update', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

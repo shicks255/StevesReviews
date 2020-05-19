@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
+import { getCoverArtThumbnail } from "../utils/ImageRetriever";
 import NoImage from '../images/no-album-cover.png';
 
 export default function ArtistPage(props) {
@@ -11,11 +12,11 @@ export default function ArtistPage(props) {
     const [loading, setLoading] = useState(true);
 
     async function fetchData() {
-        const artistData = await fetch(`/artist/${id}`);
+        const artistData = await fetch(`/api/artist/${id}`);
         const artistJson = await artistData.json();
         setArtist(artistJson);
 
-        const albums = await fetch(`/album/artist/${id}`);
+        const albums = await fetch(`/api/album/artist/${id}`);
         let albumsJson = await albums.json();
         console.log(albumsJson);
         // albumsJson.sort((a,b) => {
@@ -96,7 +97,8 @@ function AlbumLine(props) {
             setImage(NoImage);
         else {
             const json = await data.json();
-            setImage(json.images[0].image);
+            const image = getCoverArtThumbnail(json);
+            setImage(image);
         }
     }
 

@@ -20,7 +20,7 @@ export default function AlbumPage(props) {
     }, [cookie]);
 
     async function getAlbumAndArtistAndImage() {
-        const result = await fetch(`/album/${id}`, {
+        const result = await fetch(`/api/album/${id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + cookie
@@ -37,7 +37,7 @@ export default function AlbumPage(props) {
 
         const imageData = await fetch('https://coverartarchive.org/release-group/' + data.album.id);
         const imageJson = await imageData.json();
-        setImage(imageJson.images[0].image);
+        setImage(imageJson.images[0].image.replace('http', 'https'));
     }
 
     function getTimeStamp(millis) {

@@ -1,22 +1,25 @@
 package com.steven.hicks.models.album;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Objects;
 
-//@Entity
+@Entity
 @Table(name = "album_images")
 public class AlbumImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "album_id")
     private int id;
 
-    @OneToOne
+    @ManyToOne
     @JoinColumn(name = "album_id")
+    @JsonIgnore
     private Album album;
 
     private String text;
+    private String size;
     private String url;
 
     @Override
@@ -68,5 +71,13 @@ public class AlbumImage {
 
     public void setUrl(String url) {
         this.url = url;
+    }
+
+    public String getSize() {
+        return size;
+    }
+
+    public void setSize(String size) {
+        this.size = size;
     }
 }

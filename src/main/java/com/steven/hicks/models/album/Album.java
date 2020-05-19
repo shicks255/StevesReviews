@@ -33,6 +33,9 @@ public class Album {
     @OneToMany(mappedBy = "album")
     private List<Track> tracks;
 
+    @OneToMany(mappedBy = "album")
+    private List<AlbumImage> images;
+
     @Override
     public String toString() {
         return String.format("Album %s %s", title, id);
@@ -113,5 +116,13 @@ public class Album {
 
     public void setTracks(List<Track> tracks) {
         this.tracks = tracks;
+    }
+
+    public List<AlbumImage> getImages() {
+        return images;
+    }
+
+    public void setImages(List<AlbumImage> images) {
+        this.images = images;
     }
 }

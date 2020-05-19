@@ -20,7 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
 @RestController
-@RequestMapping("/album")
+@RequestMapping("/api/album")
 public class AlbumController {
 
     @Autowired

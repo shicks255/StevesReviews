@@ -1,5 +1,6 @@
 package com.steven.hicks.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
@@ -16,6 +17,7 @@ public class User implements UserDetails {
     private int id;
 
     private String username;
+    @JsonIgnore
     private String password;
     @Column(name = "email_list")
     private boolean emailList;

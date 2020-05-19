@@ -10,7 +10,7 @@ export default function Login(props) {
             'password': e.target.password.value,
         }
 
-        const result = await fetch("/auth/login", {
+        const result = await fetch("/api/auth/login", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'

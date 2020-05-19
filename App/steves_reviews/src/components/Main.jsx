@@ -7,7 +7,7 @@ function Main() {
     const [recentReviews, setRecentReviews] = useState([]);
 
     async function fetchRecentReviews() {
-        const data = await fetch('/review/recent');
+        const data = await fetch('/api/review/recent');
         const reviews = await data.json();
         console.log(reviews);
         setRecentReviews(reviews);

@@ -6,7 +6,7 @@ export default function SiteStats() {
     const [stats, setStats] = useState({});
 
     async function getSiteStats() {
-        const data = await fetch('/stats/siteStats')
+        const data = await fetch('/api/stats/siteStats')
         const siteStats = await data.json();
         setStats(siteStats);
     }

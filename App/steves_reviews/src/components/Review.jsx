@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 import NoImage from '../images/no-album-cover.png';
+import { getCoverArtThumbnail } from "../utils/ImageRetriever";
 
 
 export default function Review(props) {
@@ -10,7 +11,8 @@ export default function Review(props) {
     async function getImage(id) {
         const result = await fetch('https://coverartarchive.org/release-group/' + id);
         const imageData = await result.json();
-        setImage(imageData.images[0].image);
+        const image = getCoverArtThumbnail(imageData);
+        setImage(image);
     }
 
     useEffect(() => {

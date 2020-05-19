@@ -19,21 +19,21 @@ export default function UserPage(props) {
     }, []);
 
     async function fetchUserStats() {
-        const userStatsResult = await fetch('/user/stats/' + id);
+        const userStatsResult = await fetch('/api/user/stats/' + id);
         const userStats = await userStatsResult.json();
         setUserStats(userStats);
         console.log(userStats);
     }
 
     async function fetchUser() {
-        const userResult = await fetch('/user/' + id);
+        const userResult = await fetch('/api/user/' + id);
         const user = await userResult.json();
         setUser(user);
         console.log(user);
     }
 
     async function fetchReviews() {
-        const reviewResult = await fetch('/review/user/' + id);
+        const reviewResult = await fetch('/api/review/user/' + id);
         const reviews = await reviewResult.json();
         console.log(reviews);
         setReviews(reviews);

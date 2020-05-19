@@ -20,7 +20,7 @@ export default function AuthRoute({component: Component, ...rest}) {
             cookie = cookieValue.split('=')[1];
             rest.cookie = cookie;
         }
-        const result = fetch('/auth/isLoggedIn', {
+        const result = fetch('/api/auth/isLoggedIn', {
             headers: {
                 'Authorization' : 'Bearer ' + cookie
             }

@@ -93,7 +93,7 @@ public class AlbumService {
     }
 
     public List<Album> getAlbumsByArtist(String artistId) {
-        return m_albumRepository.findAllByArtistId(artistId);
+        return m_albumRepository.findAllByArtistIdOrderByReleaseDate(artistId);
     }
 
     public AlbumReviewsArtist getAlbumReviewArtistDTO(String albumId, User user) {

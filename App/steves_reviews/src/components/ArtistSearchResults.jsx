@@ -8,7 +8,7 @@ export default function ArtistSearchResults(props) {
     const [loading, setLoading] = useState(true);
 
     async function searchArtists() {
-        const data = await fetch(`/artist/search/${search}`);
+        const data = await fetch(`/api/artist/search/${search}`);
         const artistResults = await data.json();
         setArtists(artistResults);
         setLoading(false);
