@@ -10,4 +10,5 @@ import java.util.List;
 public interface ArtistImageRepository extends JpaRepository<ArtistImage, Integer> {
 
     List<ArtistImage> findAllById(int artistId);
+    boolean existsAllByUrl(String url);
 }

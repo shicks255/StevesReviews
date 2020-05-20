@@ -5,10 +5,10 @@ import com.fasterxml.jackson.databind.JsonNode;
 public class ReviewWithAlbum {
 
     private JsonNode album;
-    private JsonNode review;
+    private ReviewDTO review;
     private JsonNode artist;
 
-    public ReviewWithAlbum(JsonNode album, JsonNode review, JsonNode artist) {
+    public ReviewWithAlbum(JsonNode album, ReviewDTO review, JsonNode artist) {
         this.album = album;
         this.review = review;
         this.artist = artist;
@@ -22,11 +22,11 @@ public class ReviewWithAlbum {
         this.album = album;
     }
 
-    public JsonNode getReview() {
+    public ReviewDTO getReview() {
         return review;
     }
 
-    public void setReview(JsonNode review) {
+    public void setReview(ReviewDTO review) {
         this.review = review;
     }
 

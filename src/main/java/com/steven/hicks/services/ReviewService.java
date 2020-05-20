@@ -30,10 +30,9 @@ public class ReviewService {
     ArtistRepository m_artistRepository;
 
     private ObjectMapper m_objectMapper = new ObjectMapper();
-    private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
     public List<ReviewWithAlbum> getRecentReviews() {
-        List<ReviewDTO> reviews = m_reviewRepository.findAll().subList(0, 3)
+        List<ReviewDTO> reviews = m_reviewRepository.findByOrderByAddedOnDesc().subList(0, 3)
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());
@@ -44,12 +43,11 @@ public class ReviewService {
                 Album album = m_albumRepository.findById(x.getAlbumId()).get();
                 Artist artist = album.getArtist();
                 String albumNode = m_objectMapper.writeValueAsString(album);
-                String reviewNode = m_objectMapper.writeValueAsString(x);
                 String artistNode = m_objectMapper.writeValueAsString(artist);
 
                 return new ReviewWithAlbum(
                         m_objectMapper.readTree(albumNode),
-                        m_objectMapper.readTree(reviewNode),
+                        x,
                         m_objectMapper.readTree(artistNode)
                 );
             } catch (JsonProcessingException | NullPointerException e)
@@ -84,12 +82,11 @@ public class ReviewService {
                     try
                     {
                         String albumNode = m_objectMapper.writeValueAsString(album);
-                        String reviewNode = m_objectMapper.writeValueAsString(r);
                         String artistNode = m_objectMapper.writeValueAsString(artist);
 
                         return new ReviewWithAlbum(
                                 m_objectMapper.readTree(albumNode),
-                                m_objectMapper.readTree(reviewNode),
+                                r,
                                 m_objectMapper.readTree(artistNode)
                         );
                     } catch (JsonProcessingException e) {

@@ -115,7 +115,7 @@ public class AlbumService {
         return new AlbumReviewsArtist(artist, reviews, rating, album, null);
     }
 
-    public List<ReviewWithAlbumAndAverage> getTopRated() throws Exception {
+    public List<ReviewWithAlbumAndAverage> getTopRated() {
         List<ReviewWithAlbumAndAverage> albumWithReviews = m_jdbcTemplate.query("select album_id,avg(rating)as avrg from reviews group by album_id order by avrg desc limit 10;",
                 (rs, num) -> {
                     String albumId = rs.getString("album_id");
@@ -126,10 +126,10 @@ public class AlbumService {
                     {
                         String json = m_objectMapper.writeValueAsString(album);
                         JsonNode node = m_objectMapper.readTree(json);
-                        JsonNode rev = m_objectMapper.readTree(m_objectMapper.writeValueAsString(review));
                         JsonNode art = m_objectMapper.readTree(m_objectMapper.writeValueAsString(album.getArtist()));
+                        ReviewDTO reviewDTO = new ReviewDTO(review);
 
-                        ReviewWithAlbum rwa = new ReviewWithAlbum(node, rev, art);
+                        ReviewWithAlbum rwa = new ReviewWithAlbum(node, reviewDTO, art);
                         return new ReviewWithAlbumAndAverage(rwa, rating);
                     } catch (JsonProcessingException e)
                     {
