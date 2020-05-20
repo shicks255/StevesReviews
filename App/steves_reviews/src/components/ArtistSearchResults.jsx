@@ -22,17 +22,18 @@ export default function ArtistSearchResults(props) {
         return <div>loading</div>
 
     return (
-        <div>
-            {search}
-            <table>
-                <tbody>
+        <div className='has-text-left'>
+            Searching for... {search}
+            <table className='table is-striped is-hoverable'>
+                <thead>
                 <tr>
-                    <td>Name</td>
-                    <td></td>
-                    <td>Formed</td>
-                    <td>Tags</td>
+                    <th>Name</th>
+                    <th>Formed</th>
+                    <th>Tags</th>
                 </tr>
+                </thead>
 
+                <tbody>
                 {artists.map(a => {
                     return (
                         <tr key={a.id}>
@@ -41,8 +42,8 @@ export default function ArtistSearchResults(props) {
                                     {a.name}
                                 </Link>
                                 <br/>
+                                {a.disambiguation}
                             </td>
-                            <td>{a.disambiguation}</td>
                             <td>
                                 {(a['begin-area']) ? a['begin-area'].name + ',' : ''}
                                 {a.country}
@@ -50,7 +51,9 @@ export default function ArtistSearchResults(props) {
                                 {(a['life-span']) ? a['life-span'].begin : ''}
                             </td>
                             <td>
-                                {a.tags ? a.tags.map(t => <span key={t.name}>{t.name}</span>) : ''}
+                                {a.tags ? a.tags.map(t =>
+                                    <span className='tag is-rounded is-normal is-info is-light' key={t.name}>{t.name}</span>
+                                ): ''}
                             </td>
                         </tr>
                     )

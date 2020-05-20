@@ -64,8 +64,8 @@ export default function ArtistPage(props) {
                 <br/><br/>
                 {releaseTypes.map(rt => {
                     return (
-                        <div key={rt}>
-                            <p>{rt}s</p>
+                        <div key={rt} className='has-text-left'>
+                            <p><b>{rt}s</b></p>
                             <table className="table">
                                 <tbody>
                                 {albums.filter(x => x.type == rt).map(a => {
