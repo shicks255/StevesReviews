@@ -28,7 +28,6 @@ export default function AlbumPage(props) {
         });
         const data = await result.json();
         setData(data);
-        console.log(data);
 
         let discs = new Set();
         data.album.tracks.forEach(x => discs.add(x.disc));
@@ -43,8 +42,8 @@ export default function AlbumPage(props) {
     function getTimeStamp(millis) {
         const totalSeconds = (millis/1000);
         const minutes = Math.floor(totalSeconds/60);
-        const left = totalSeconds - (minutes*60);
-        const seconds = Math.round(left);
+        const left = Math.round(totalSeconds - (minutes*60));
+        const seconds = (left<10) ? '0' + left : left;
         return minutes + ":" + seconds;
     }
 
@@ -64,9 +63,7 @@ export default function AlbumPage(props) {
                 </ul>
             </nav>
 
-            <br/>
-
-            <div className="columns">
+            <div style={{paddingTop: 0}} className="columns">
                 <div className="column is-one-third">
                     <figure className='image is-512x512'>
                         <img src={image}/>
@@ -86,7 +83,7 @@ export default function AlbumPage(props) {
                                 </tr>
                                 {data.album.tracks.filter(tr => tr.disc == d).map(tr => {
                                     return <tr key={tr.id}>
-                                        <td>{tr.number}</td>
+                                        <td className='has-text-right'>{tr.number}.</td>
                                         <td>{tr.title}</td>
                                         <td>{getTimeStamp(tr.length)}</td>
                                     </tr>
@@ -110,17 +107,17 @@ export default function AlbumPage(props) {
                             </td>
                         </tr>
                         <tr>
-                            <td style={{width: "50px"}}>Released:</td>
+                            <td style={{width: "50px"}}><b>Released</b>:</td>
                             <td>{data.album.releaseDate}</td>
                         </tr>
                         <tr>
-                            <td>Rating: </td>
+                            <td><b>Rating:</b></td>
                             <td>{data.rating}</td>
                         </tr>
                         </tbody>
                     </table>
                     {context.loggedIn
-                        ? <AddEditReview review={data.loggedInUserReview}/>
+                        ? <AddEditReview albumId={data.album.id} review={data.loggedInUserReview}/>
                         : 'Log in to leave a review'
                     }
                     {data.reviews.map(r => {

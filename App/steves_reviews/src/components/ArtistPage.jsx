@@ -18,10 +18,6 @@ export default function ArtistPage(props) {
 
         const albums = await fetch(`/api/album/artist/${id}`);
         let albumsJson = await albums.json();
-        console.log(albumsJson);
-        // albumsJson.sort((a,b) => {
-        //     return a.releaseDate.localeCompare(b.releaseDate);
-        // });
 
         const types = new Set();
         albumsJson.forEach((e) => types.add(e.type));

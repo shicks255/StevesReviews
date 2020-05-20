@@ -1,6 +1,4 @@
 import React, {useEffect, useState} from 'react';
-import { Link } from 'react-router-dom';
-import NoImage from '../images/no-album-cover.png';
 import Review from "./Review";
 
 export default function TopRated() {
@@ -21,12 +19,16 @@ export default function TopRated() {
         return "";
 
     return (
-        <table className="table">
-            <tbody>
-            {albumsAndRatings.map((ar, index) => {
-                return <Review rank={index} rating={ar.average} review={ar.reviewWithAlbum.review} album={ar.reviewWithAlbum.album} artist={ar.reviewWithAlbum.artist}/>
-            })};
-            </tbody>
-        </table>
+        <div className='columns'>
+            <div className='column is-12-mobile is-10-desktop is-offset-1-desktop'>
+                <table className="table">
+                    <tbody>
+                    {albumsAndRatings.map((ar, index) => {
+                        return <Review rank={index} colorClass={ar.colorClass} rating={ar.average} review={ar.reviewWithAlbum.review} album={ar.reviewWithAlbum.album} artist={ar.reviewWithAlbum.artist}/>
+                    })};
+                    </tbody>
+                </table>
+            </div>
+        </div>
     )
 }

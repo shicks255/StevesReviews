@@ -80,3 +80,9 @@ button:active {
   visibility: hidden;
   transition: opacity .11s linear, visibility 1s linear;
 }
+
+.editReviewContent {
+  width: 85%;
+  padding: 5px;
+  height: 100%;
+}

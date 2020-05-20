@@ -19,7 +19,7 @@ export default function ArtistSearch(props) {
         <div>
             <form onSubmit={submitForm}>
                 <input type='text' onChange={(e) => updateForm(e)}/>
-                <button type='submit'>Search</button>
+                <button className='button is-info' type='submit'>Search</button>
             </form>
         </div>
     )

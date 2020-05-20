@@ -1,37 +1,59 @@
-import React, {useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {UserContext} from "./UserContext";
 
 export default function AddEditReview(props) {
     const review = props.review;
+    const albumId = props.albumId;
     const context = useContext(UserContext);
+
+    const [reviewContent, setReviewContent]
+        = useState('');
+    const [rating, setRating]
+        = useState(1.0);
+
+    useEffect(() => {
+        setReviewContent(review ? review.content : '');
+        setRating(review ? review.rating : 1.0);
+    }, [props.review]);
+
+    function changeRating(e) {
+        e.preventDefault();
+        setRating(e.target.value);
+    }
+
+    function changeContent(e) {
+        e.preventDefault();
+        console.log(e.target.value);
+        setReviewContent(e.target.value);
+    }
 
     function submitForm(e) {
         e.preventDefault();
 
-        const content = e.target.content.value;
-        const rating = e.target.rating.value;
         const id = review ? review.id : null;
-
         const body = {
-            'content': content,
+            'content': reviewContent,
             'rating': rating,
+            'albumId': albumId,
             'id': id
         }
 
-        const result = fetch('/api/review/update', {
+        const result = fetch('/api/review/upsert', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + context.cookie
             },
             body: JSON.stringify(body)
+
         });
     }
 
     return (
-        <div>
+        <div className='has-text-left'>
+            Your review
             <form onSubmit={submitForm}>
-                <select id='rating' value={review ? review.rating : 1}>
+                <select onChange={changeRating} id='rating' value={rating}>
                     <option>1</option>
                     <option>1.5</option>
                     <option>2</option>
@@ -43,10 +65,14 @@ export default function AddEditReview(props) {
                     <option>5</option>
                 </select>
                 <br/>
-                <textarea id='content' value={review ? review.content : ''} />
+                <textarea rows='8'
+                          className='editReviewContent'
+                          onChange={changeContent}
+                          id='content'
+                          value={reviewContent} />
 
                 <br/>
-                <button type='submit'>{review ? 'Update' : 'Create'}</button>
+                <button className='button is-info' type='submit'>{review ? 'Update' : 'Create'}</button>
             </form>
         </div>
     );

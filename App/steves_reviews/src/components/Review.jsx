@@ -5,7 +5,7 @@ import { getCoverArtThumbnail } from "../utils/ImageRetriever";
 
 
 export default function Review(props) {
-    const {review, album, artist, rating} = props;
+    const {review, album, artist, rating, colorClass} = props;
     const [image, setImage] = useState(NoImage);
 
     async function getImage(id) {
@@ -51,7 +51,7 @@ export default function Review(props) {
                     <div className='has-text-left'>
                         <Link to={`user/${review.user.id}`}>{review.user.username}</Link>
                         <br/>
-                        <span className={`tag ${review.colorClass}`}>
+                        <span className={`tag ${colorClass ? colorClass : review.colorClass}`}>
                             Rating: {rating ? rating : review.rating}
                         </span>
                         <br/>
