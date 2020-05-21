@@ -9,7 +9,6 @@ function Main() {
     async function fetchRecentReviews() {
         const data = await fetch('/api/review/recent');
         const reviews = await data.json();
-        console.log(reviews);
         setRecentReviews(reviews);
     }
 

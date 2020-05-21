@@ -3,12 +3,12 @@ import Review from "./Review";
 import AddEditReview from "./AddEditReview";
 import { UserContext } from "./UserContext";
 import { Link } from 'react-router-dom';
+import ImageCarousel from "./ImageCarousel";
 
 export default function AlbumPage(props) {
 
     const id = props.match.params.id;
     const [loading, setLoading] = useState(true);
-    const [image, setImage] = useState('');
     const [data, setData] = useState({});
     const [discs, setDiscs] = useState([]);
 
@@ -33,10 +33,6 @@ export default function AlbumPage(props) {
         data.album.tracks.forEach(x => discs.add(x.disc));
         setDiscs([...discs]);
         setLoading(false);
-
-        const imageData = await fetch('https://coverartarchive.org/release-group/' + data.album.id);
-        const imageJson = await imageData.json();
-        setImage(imageJson.images[0].image.replace('http', 'https'));
     }
 
     function getTimeStamp(millis) {
@@ -65,9 +61,7 @@ export default function AlbumPage(props) {
 
             <div style={{paddingTop: 0}} className="columns">
                 <div className="column is-one-third">
-                    <figure className='image is-512x512'>
-                        <img src={image}/>
-                    </figure>
+                    <ImageCarousel images={data.album.images} />
 
                     <table className="table is-hoverable is-narrow">
                         <tbody>

@@ -1,22 +1,18 @@
 import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import NoImage from '../images/no-album-cover.png';
-import { getCoverArtThumbnail } from "../utils/ImageRetriever";
-
+import {getCoverArtThumb} from "../utils/ImageRetriever";
 
 export default function Review(props) {
     const {review, album, artist, rating, colorClass} = props;
-    const [image, setImage] = useState(NoImage);
+    const [image, setImage] = useState('');
 
-    async function getImage(id) {
-        const result = await fetch('https://coverartarchive.org/release-group/' + id);
-        const imageData = await result.json();
-        const image = getCoverArtThumbnail(imageData);
-        setImage(image);
+    async function getImage() {
+        const x = await getCoverArtThumb(album);
+        setImage(x);
     }
 
     useEffect(() => {
-        getImage(album.id);
+        getImage();
     }, []);
 
     function toggleCollapse(e) {

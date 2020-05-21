@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -38,15 +39,19 @@ public class ReviewController {
         return reviewWithAlbums;
     }
 
-    @PostMapping("/update")
+    @PostMapping("/upsert")
     public void updateReview(@RequestBody  Review review, HttpServletRequest request) {
         User user = m_jwtTokenService.getUserFromToken(request);
         if (review.getId() == 0)
         {
             review.setUser(user);
+            review.setAddedOn(LocalDateTime.now());
             m_reviewService.saveReview(review);
         }
         else
+        {
+            review.setLastUpdated(LocalDateTime.now());
             m_reviewService.updateReview(review);
+        }
     }
 }

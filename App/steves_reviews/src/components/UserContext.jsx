@@ -3,9 +3,6 @@ import React, {useEffect, useState} from 'react';
 const UserContext = React.createContext();
 const UserContextProvider = (props) =>
 {
-
-    console.log('userContext');
-
     const [cookie, setCookie] = useState('');
     const [loggedIn, setLoggedIn] = useState(false);
 
@@ -31,6 +28,8 @@ const UserContextProvider = (props) =>
                 setLoggedIn(true);
                 return true;
             }
+            else
+                document.cookie = "sreviews=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
         }
         return false;
     }

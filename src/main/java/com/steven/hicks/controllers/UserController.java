@@ -1,6 +1,7 @@
 package com.steven.hicks.controllers;
 
 import com.steven.hicks.models.User;
+import com.steven.hicks.models.dtos.UserLogin;
 import com.steven.hicks.models.dtos.UserStats;
 import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.services.StatsService;
@@ -47,7 +48,10 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody User user) {
-        m_userService.registerUser(user);
+    public void register(@RequestBody UserLogin user) {
+        User newUser = new User();
+        newUser.setUsername(user.getUsername());
+        newUser.setPassword(user.getPassword());
+        m_userService.registerUser(newUser);
     }
 }

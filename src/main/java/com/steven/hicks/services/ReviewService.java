@@ -70,7 +70,7 @@ public class ReviewService {
     }
 
     public List<ReviewWithAlbum> getReviewsByUser(int userId) {
-        List<ReviewDTO> reviews = m_reviewRepository.findAllByUserId(userId)
+        List<ReviewDTO> reviews = m_reviewRepository.findAllByUserIdOrderByAddedOnDesc(userId)
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());

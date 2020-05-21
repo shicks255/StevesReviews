@@ -10,7 +10,7 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findAllByAlbumId(String albumId);
     Review findFirstByAlbumIdOrderByRatingDesc(String albumId);
-    List<Review> findAllByUserId(int userId);
+    List<Review> findAllByUserIdOrderByAddedOnDesc(int userId);
     List<Review> findByOrderByAddedOnDesc();
 
     @Query(value = "select count(*) from reviews where user_id = ?1", nativeQuery = true)

@@ -31,8 +31,8 @@ public class StatsService {
 
     @Bean
     public SiteStats getSiteStats() {
-        if (instance == null)
-        {
+//        if (instance == null)
+//        {
             long users = m_userRepository.count();
             long albums = m_albumRepository.count();
             List<Review> reviews = m_reviewRepository.findAll();
@@ -44,14 +44,14 @@ public class StatsService {
                     .count();
 
             instance = new SiteStats(users, albums, reviews.size(), ratings, fiveStars);
-        }
+//        }
 
         return instance;
     }
 
     public UserStats getUserStats(int userId) {
 
-        List<Review> reviews = m_reviewRepository.findAllByUserId(userId);
+        List<Review> reviews = m_reviewRepository.findAllByUserIdOrderByAddedOnDesc(userId);
         if (reviews.size() == 0)
             return new UserStats(0, 0, 0.0f, 0, "");
 
@@ -66,7 +66,6 @@ public class StatsService {
 
 
         String lastReviewDate = reviews.stream()
-                .sorted(Comparator.comparing(Review::getAddedOn))
                 .findFirst()
                 .map(x -> x.getAddedOn().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
                 .orElse("");

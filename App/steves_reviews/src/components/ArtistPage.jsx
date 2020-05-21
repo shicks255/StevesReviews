@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
-import { getCoverArtThumbnail } from "../utils/ImageRetriever";
-import NoImage from '../images/no-album-cover.png';
+import {getCoverArtThumb} from "../utils/ImageRetriever";
 
 export default function ArtistPage(props) {
 
@@ -88,14 +87,8 @@ function AlbumLine(props) {
     const [image, setImage] = useState('');
 
     async function getImage() {
-        const data = await fetch('https://coverartarchive.org/release-group/' + album.id);
-        if (data.status != 200)
-            setImage(NoImage);
-        else {
-            const json = await data.json();
-            const image = getCoverArtThumbnail(json);
-            setImage(image);
-        }
+        const x = await getCoverArtThumb(album);
+        setImage(x);
     }
 
     useEffect(() => {
