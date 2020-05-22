@@ -23,7 +23,7 @@ export default function ImageCarousel(props) {
     return (
         <div>
             <figure className='image is-512x512'>
-                <img key={imageIndex}
+                <img width='512' height='512' key={imageIndex}
                      src={images.length > 0 ? images[imageIndex].url : NoImage}/>
             </figure>
 
