@@ -44,7 +44,13 @@ export default function AlbumPage(props) {
     }
 
     if (loading)
-        return <div>loading</div>
+        return (
+            <>
+                <br/>
+                <i className='fas fa-4x fa-stroopwafel fa-spin'></i>
+                <br/>
+                <br/>
+            </>)
 
     return (
         <div>

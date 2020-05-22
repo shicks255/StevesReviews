@@ -3,21 +3,20 @@ import Review from "./Review";
 import {UserContext} from "./UserContext";
 import UserStats from "./UserStats";
 
-export default function MyAccount(props) {
+export default function MyAccount() {
 
     const [userStats, setUserStats] = useState({});
     const [user, setUser] = useState({});
     const [reviews, setReviews] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     const context = useContext(UserContext);
 
     useEffect(() => {
-        fetchUserStats();
-        fetchUser();
-        fetchReviews();
+        fetchData();
     }, []);
 
-    async function fetchUserStats() {
+    async function fetchData() {
         const userStatsResult = await fetch('/api/user/stats', {
             headers: {
                 'Authorization': 'Bearer ' + context.cookie
@@ -25,19 +24,7 @@ export default function MyAccount(props) {
         });
         const userStats = await userStatsResult.json();
         setUserStats(userStats);
-    }
 
-    async function fetchUser() {
-        const userResult = await fetch('/api/user', {
-            headers: {
-                'Authorization': 'Bearer ' + context.cookie
-            }
-        });
-        const user = await userResult.json();
-        setUser(user);
-    }
-
-    async function fetchReviews() {
         const reviewResult = await fetch('/api/review/user', {
             headers: {
                 'Content-Type': 'application/json',
@@ -45,9 +32,27 @@ export default function MyAccount(props) {
             }
         });
         const reviews = await reviewResult.json();
-        console.log(reviews);
         setReviews(reviews);
+
+        const userResult = await fetch('/api/user', {
+            headers: {
+                'Authorization': 'Bearer ' + context.cookie
+            }
+        });
+        const user = await userResult.json();
+        setUser(user);
+
+        setLoading(false);
     }
+
+    if (loading)
+        return (
+            <>
+                <br/>
+                <i className='fas fa-4x fa-stroopwafel fa-spin'></i>
+                <br/>
+                <br/>
+            </>)
 
     return(
         <div className='columns'>
@@ -74,13 +79,16 @@ export default function MyAccount(props) {
             <div className='column is-two-thirds'>
                 <div className="level">
                     <div className="level-item is-center">
+                        <h1 className="title has-text-centered">My Reviews</h1>
                     </div>
-                    <h1 className="title is-center">My Reviews</h1>
                 </div>
                 {
-                    reviews.map(rwa => {
-                        return <Review key={rwa.review.id} artist={rwa.artist} album={rwa.album} review={rwa.review}/>
-                    })
+                    reviews.length == 0 ?
+                        'No reviews yet'
+                        :
+                        reviews.map(rwa => {
+                            return <Review key={rwa.review.id} artist={rwa.artist} album={rwa.album} review={rwa.review}/>
+                        })
                 }
             </div>
         </div>

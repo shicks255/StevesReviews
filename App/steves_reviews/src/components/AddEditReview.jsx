@@ -23,7 +23,6 @@ export default function AddEditReview(props) {
 
     function changeContent(e) {
         e.preventDefault();
-        console.log(e.target.value);
         setReviewContent(e.target.value);
     }
 

@@ -11,7 +11,6 @@ export default function AuthRoute({component: Component, ...rest}) {
     }, []);
 
     function ensureLoggedIn() {
-        console.log('ensuring logged in from AuthenticatedRoute');
         const cookies = document.cookie;
         let cookie;
         if (cookies.includes('sreviews=')) {
@@ -27,8 +26,6 @@ export default function AuthRoute({component: Component, ...rest}) {
         });
 
         result.then(resp => {
-            console.log(rest);
-            console.log(resp);
             setStatus(resp.status);
         })
     }

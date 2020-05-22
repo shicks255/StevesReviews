@@ -4,8 +4,6 @@ export default function ArtistSearch(props) {
 
     const [formValue, setFormValue] = useState("");
 
-    console.log(props.history);
-
     function updateForm(e) {
         setFormValue(e.target.value);
     }

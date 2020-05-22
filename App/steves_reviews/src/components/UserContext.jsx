@@ -18,7 +18,6 @@ const UserContextProvider = (props) =>
             const cookie = cookieValue.split('=')[1];
             setCookie(cookie);
 
-            console.log('calling isLoggedIn')
             const result = await fetch('/api/auth/isLoggedIn', {
                 headers: {
                     'Authorization' : 'Bearer ' + cookie

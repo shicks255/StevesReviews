@@ -4,19 +4,29 @@ import Review from "./Review";
 export default function TopRated() {
 
     const [albumsAndRatings, setAlbumsAndRatings] = useState([]);
+    const [loading, setLoading] = useState(true);
 
     async function loadAlbumsAndRatings() {
         const data = await fetch('/api/album/topRated')
         const albumsAndRatings = await data.json();
         setAlbumsAndRatings(albumsAndRatings);
+        setLoading(false);
     }
 
     useEffect(() => {
         loadAlbumsAndRatings();
     }, []);
 
-    if (albumsAndRatings.length === 0)
-        return "";
+    if (loading) {
+        return (
+            <>
+                <br/>
+                <i className='fas fa-4x fa-stroopwafel fa-spin'></i>
+                <br/>
+                <br/>
+            </>
+        )
+    }
 
     return (
         <div className='columns'>
