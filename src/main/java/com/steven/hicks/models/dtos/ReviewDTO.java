@@ -2,6 +2,8 @@ package com.steven.hicks.models.dtos;
 
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
+import com.steven.hicks.models.album.Album;
+import com.steven.hicks.models.artist.Artist;
 
 import java.time.format.DateTimeFormatter;
 
@@ -10,79 +12,41 @@ public class ReviewDTO {
     private static DateTimeFormatter FORMATTER
             = DateTimeFormatter.ofPattern("MM/dd/yyyy");
 
-    private int id;
-    private String albumId;
-    private User user;
-    private String addedOn;
-    private String content;
-    private float rating;
+    private Artist artist;
+    private Review review;
     private String colorClass;
+    private Double rating;
 
     public ReviewDTO(Review review) {
-        this.id = review.getId();
-        this.albumId = review.getAlbumId();
-        this.user = review.getUser();
-        this.content = review.getContent();
-        this.rating = review.getRating();
 
-        this.addedOn = FORMATTER.format(review.getAddedOn());
-        if (this.rating >= 3.5)
+        this.artist = review.getAlbum().getArtist();
+        this.review = review;
+
+        if (review.getRating() >= 3.5)
             this.colorClass = "is-success";
-        else if (this.rating >= 2.0)
+        else if (review.getRating() >= 2.0)
             this.colorClass = "is-warning";
-        else if (this.rating < 2.0)
+        else if (review.getRating() < 2.0)
             this.colorClass = "is-danger";
         else
             this.colorClass = "is-light";
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getAlbumId() {
-        return albumId;
-    }
-
-    public void setAlbumId(String albumId) {
-        this.albumId = albumId;
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public String getAddedOn() {
-        return addedOn;
-    }
-
-    public void setAddedOn(String addedOn) {
-        this.addedOn = addedOn;
-    }
-
-    public String getContent() {
-        return content;
-    }
-
-    public void setContent(String content) {
-        this.content = content;
-    }
-
-    public float getRating() {
-        return rating;
-    }
-
-    public void setRating(float rating) {
-        this.rating = rating;
-    }
+//    public String getAlbumId() {
+//        return albumId;
+//    }
+//
+//    public void setAlbumId(String albumId) {
+//        this.albumId = albumId;
+//    }
+//
+//    public User getUser() {
+//        return user;
+//    }
+//
+//    public void setUser(User user) {
+//        this.user = user;
+//    }
 
     public String getColorClass() {
         return colorClass;
@@ -90,5 +54,29 @@ public class ReviewDTO {
 
     public void setColorClass(String colorClass) {
         this.colorClass = colorClass;
+    }
+
+    public Artist getArtist() {
+        return artist;
+    }
+
+    public void setArtist(Artist artist) {
+        this.artist = artist;
+    }
+
+    public Review getReview() {
+        return review;
+    }
+
+    public void setReview(Review review) {
+        this.review = review;
+    }
+
+    public Double getRating() {
+        return rating;
+    }
+
+    public void setRating(Double rating) {
+        this.rating = rating;
     }
 }

@@ -14,7 +14,6 @@ public class Artist {
     private String id;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.EAGER)
-//    @JsonManagedReference
     private List<Album> albums;
 
     @OneToMany(mappedBy = "artist", fetch = FetchType.LAZY)

@@ -121,7 +121,7 @@ export default function AlbumPage(props) {
                         : 'Log in to leave a review'
                     }
                     {data.reviews.map(r => {
-                        return <Review hideAlbum={true} key={r.id} album={data.album} review={r} />
+                        return <Review hideAlbum={true} key={r.id} reviewDto={r} />
                     })}
                 </div>
             </div>

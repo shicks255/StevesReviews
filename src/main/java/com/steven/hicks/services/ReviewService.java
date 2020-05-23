@@ -1,14 +1,7 @@
 package com.steven.hicks.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.models.Review;
-import com.steven.hicks.models.album.Album;
-import com.steven.hicks.models.artist.Artist;
 import com.steven.hicks.models.dtos.ReviewDTO;
-import com.steven.hicks.models.dtos.ReviewWithAlbum;
 import com.steven.hicks.repositories.AlbumRepository;
 import com.steven.hicks.repositories.ArtistRepository;
 import com.steven.hicks.repositories.ReviewRepository;
@@ -29,35 +22,29 @@ public class ReviewService {
     @Autowired
     ArtistRepository m_artistRepository;
 
-    private ObjectMapper m_objectMapper = new ObjectMapper();
-
-    public List<ReviewWithAlbum> getRecentReviews() {
-        List<ReviewDTO> reviews = m_reviewRepository.findByOrderByAddedOnDesc().subList(0, 3)
+    public List<ReviewDTO> getRecentReviews() {
+        return  m_reviewRepository.findTop5ByOrderByAddedOnDesc()
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());
 
-        List<ReviewWithAlbum> albumsWithReview = reviews.stream().map(x -> {
-            try
-            {
-                Album album = m_albumRepository.findById(x.getAlbumId()).get();
-                Artist artist = album.getArtist();
-                String albumNode = m_objectMapper.writeValueAsString(album);
-                String artistNode = m_objectMapper.writeValueAsString(artist);
+//        List<ReviewWithAlbum> albumsWithReview = reviews.stream().map(x -> {
+//            try
+//            {
+//                Album album = m_albumRepository.findById(x.getAlbumId()).get();
+//                Artist artist = album.getArtist();
 
-                return new ReviewWithAlbum(
-                        m_objectMapper.readTree(albumNode),
-                        x,
-                        m_objectMapper.readTree(artistNode)
-                );
-            } catch (JsonProcessingException | NullPointerException e)
-            {
-                e.printStackTrace();
-            }
-            return null;
-        }).collect(Collectors.toList());
-
-        return albumsWithReview;
+//                return new ReviewWithAlbum(
+//                        x.
+//                );
+//            } catch (NullPointerException e)
+//            {
+//                e.printStackTrace();
+//            }
+//            return null;
+//        }).collect(Collectors.toList());
+//
+//        return albumsWithReview;
     }
 
     public List<ReviewDTO> getReviewsForAlbum(String albumId) {
@@ -69,33 +56,33 @@ public class ReviewService {
         return reviews;
     }
 
-    public List<ReviewWithAlbum> getReviewsByUser(int userId) {
-        List<ReviewDTO> reviews = m_reviewRepository.findAllByUserIdOrderByAddedOnDesc(userId)
+    public List<ReviewDTO> getReviewsByUser(int userId) {
+        return m_reviewRepository.findAllByUserIdOrderByAddedOnDesc(userId)
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());
-
-        List<ReviewWithAlbum> rwa = reviews.stream()
-                .map(r -> {
-                    Album album = m_albumRepository.findById(r.getAlbumId()).get();
-                    Artist artist = album.getArtist();
-                    try
-                    {
-                        String albumNode = m_objectMapper.writeValueAsString(album);
-                        String artistNode = m_objectMapper.writeValueAsString(artist);
-
-                        return new ReviewWithAlbum(
-                                m_objectMapper.readTree(albumNode),
-                                r,
-                                m_objectMapper.readTree(artistNode)
-                        );
-                    } catch (JsonProcessingException e) {
-                        e.printStackTrace();
-                    }
-                    return null;
-                })
-                .collect(Collectors.toList());
-        return rwa;
+//                .stream()
+//                .map(x -> new ReviewDTO(x))
+//                .collect(Collectors.toList());
+//
+//        List<ReviewWithAlbum> rwa = reviews.stream()
+//                .map(r -> {
+//                    Album album = m_albumRepository.findById(r.getAlbumId()).get();
+//                    Artist artist = album.getArtist();
+//                    try
+//                    {
+//                        return new ReviewWithAlbum(
+//                                album,
+//                                r,
+//                                artist
+//                        );
+//                    } catch (Exception e) {
+//                        e.printStackTrace();
+//                    }
+//                    return null;
+//                })
+//                .collect(Collectors.toList());
+//        return rwa;
     }
 
     public Double getAverageRating(String albumId) {

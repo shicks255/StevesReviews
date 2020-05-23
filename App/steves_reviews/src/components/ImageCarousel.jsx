@@ -1,16 +1,21 @@
 import React, {useEffect, useState} from 'react';
 import NoImage from '../images/no-album-cover.png';
+import {getCarouselArt} from "../utils/ImageRetriever";
 
 export default function ImageCarousel(props) {
-    const images = props.images;
-    const [imageIndex, setImageIndex] = useState(0);
+    let imagesAll = props.images;
+    const [imageIndex, setImageIndex] = useState('');
+    const [filtered, setFiltered] = useState([]);
+
+    async function getImages() {
+        const x = await getCarouselArt(imagesAll);
+        setFiltered(x);
+        setImageIndex(0);
+    }
 
     useEffect(() => {
-        if (images.length > 0) {
-            const firstIndex = images.findIndex(x => x.text == 'front' && x.size == 'main')
-            setImageIndex(firstIndex);
-        }
-    }, [images]);
+        getImages();
+    }, [imagesAll]);
 
     function changeImage(e) {
         const index = e.target.id.substr(6);
@@ -24,11 +29,11 @@ export default function ImageCarousel(props) {
         <div>
             <figure className='image is-512x512'>
                 <img width='512' height='512' key={imageIndex}
-                     src={images.length > 0 ? images[imageIndex].url : NoImage}/>
+                     src={filtered.length > 0 ? filtered[imageIndex].url : NoImage}/>
             </figure>
 
             {
-                images.map((x,y) => {
+                filtered.map((x,y) => {
                     if (y === imageIndex)
                         return <i class='far fa-circle'></i>
                     return <i id={`image_${y}`}

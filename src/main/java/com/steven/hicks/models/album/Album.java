@@ -19,8 +19,6 @@ public class Album {
 
     @ManyToOne
     @JoinColumn(name = "artist_id")
-//    @JsonBackReference
-//    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     @JsonIgnore
     private Artist artist;
 

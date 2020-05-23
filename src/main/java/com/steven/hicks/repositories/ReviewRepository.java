@@ -11,10 +11,10 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     List<Review> findAllByAlbumId(String albumId);
     Review findFirstByAlbumIdOrderByRatingDesc(String albumId);
     List<Review> findAllByUserIdOrderByAddedOnDesc(int userId);
-    List<Review> findByOrderByAddedOnDesc();
+    List<Review> findTop5ByOrderByAddedOnDesc();
 
-    @Query(value = "select count(*) from reviews where user_id = ?1", nativeQuery = true)
-    int getCountOfReviewsByUserId(int userId);
+//    @Query(value = "select count(*) from reviews where user_id = ?1", nativeQuery = true)
+//    int getCountOfReviewsByUserId(int userId);
 
     @Query(value = "select AVG(rating) from reviews where album_id = ?1", nativeQuery = true)
     Double getAverageRating(String albumId);

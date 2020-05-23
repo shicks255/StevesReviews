@@ -87,7 +87,7 @@ export default function MyAccount() {
                         'No reviews yet'
                         :
                         reviews.map(rwa => {
-                            return <Review key={rwa.review.id} artist={rwa.artist} album={rwa.album} review={rwa.review}/>
+                            return <Review key={rwa.review.id} reviewDto={rwa}/>
                         })
                 }
             </div>

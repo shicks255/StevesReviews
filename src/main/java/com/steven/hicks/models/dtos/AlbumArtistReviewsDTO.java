@@ -1,12 +1,11 @@
 package com.steven.hicks.models.dtos;
 
-import com.steven.hicks.models.Review;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.artist.Artist;
 
 import java.util.List;
 
-public class AlbumReviewsArtist {
+public class AlbumArtistReviewsDTO {
 
     private Artist m_artist;
     private List<ReviewDTO> m_reviews;
@@ -14,7 +13,7 @@ public class AlbumReviewsArtist {
     private Album m_album;
     private ReviewDTO m_loggedInUserReview;
 
-    public AlbumReviewsArtist(Artist artist, List<ReviewDTO> reviews, Double rating, Album album, ReviewDTO userReview) {
+    public AlbumArtistReviewsDTO(Artist artist, List<ReviewDTO> reviews, Double rating, Album album, ReviewDTO userReview) {
         m_artist = artist;
         m_reviews = reviews;
         this.rating = rating;

@@ -18,9 +18,6 @@ public class ArtistController {
     @Autowired
     ArtistService m_artistService;
 
-    @Value("${fanArtKey}")
-    private String FAN_ART_KEY = "";
-
     private MBArtistSearcher m_mbArtistSearcher = new MBArtistSearcher();
 
     @GetMapping("/{id}")

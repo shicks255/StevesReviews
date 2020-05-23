@@ -47,7 +47,6 @@ export default function Login(props) {
             'password': e.target.password.value,
         }
 
-        console.log(JSON.stringify(body));
         const result = await fetch("/api/user/register", {
             method: 'POST',
             headers: {
@@ -56,7 +55,6 @@ export default function Login(props) {
             body: JSON.stringify(body)
         });
         const response = await result.text();
-        console.log(response);
 
         // if (result.status === 200) {
         //     const cookie = response;
@@ -75,12 +73,12 @@ export default function Login(props) {
     return (
         <div className='columns'>
             <div className='column is-half is is-offset-one-quarter'>
-                {/*<div className='tabs is-boxed'>*/}
-                {/*    <ul>*/}
-                {/*        <li className={tab == 'login' ? 'is-active' : ''}><a onClick={setNewTab}>Login</a></li>*/}
-                {/*        <li className={tab == 'register' ? 'is-active' : ''}><a onClick={setNewTab}>Register</a></li>*/}
-                {/*    </ul>*/}
-                {/*</div>*/}
+                <div className='tabs is-boxed'>
+                    <ul>
+                        <li className={tab == 'login' ? 'is-active' : ''}><a onClick={setNewTab}>Login</a></li>
+                        <li className={tab == 'register' ? 'is-active' : ''}><a onClick={setNewTab}>Register</a></li>
+                    </ul>
+                </div>
 
                 {tab == 'login' ? (
                     <article className='message is-large'>
@@ -152,9 +150,7 @@ export default function Login(props) {
                             </form>
                         </div>
                     </article>
-                )
-
-                }
+                )}
 
             </div>
         </div>

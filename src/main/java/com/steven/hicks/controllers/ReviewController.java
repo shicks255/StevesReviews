@@ -2,7 +2,7 @@ package com.steven.hicks.controllers;
 
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
-import com.steven.hicks.models.dtos.ReviewWithAlbum;
+import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,21 +22,19 @@ public class ReviewController {
     JwtTokenService m_jwtTokenService;
 
     @GetMapping("/recent")
-    public List<ReviewWithAlbum> getRecentReview() {
+    public List<ReviewDTO> getRecentReview() {
         return m_reviewService.getRecentReviews();
     }
 
     @GetMapping("/user")
-    public List<ReviewWithAlbum> getUserReviews(HttpServletRequest request) {
+    public List<ReviewDTO> getUserReviews(HttpServletRequest request) {
         User user = m_jwtTokenService.getUserFromToken(request);
-        List<ReviewWithAlbum> reviewWithAlbums = m_reviewService.getReviewsByUser(user.getId());
-        return reviewWithAlbums;
+        return m_reviewService.getReviewsByUser(user.getId());
     }
 
     @GetMapping("/user/{userId}")
-    public List<ReviewWithAlbum> getUserReviews(@PathVariable int userId) {
-        List<ReviewWithAlbum> reviewWithAlbums = m_reviewService.getReviewsByUser(userId);
-        return reviewWithAlbums;
+    public List<ReviewDTO> getUserReviews(@PathVariable int userId) {
+        return m_reviewService.getReviewsByUser(userId);
     }
 
     @PostMapping("/upsert")

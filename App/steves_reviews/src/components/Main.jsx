@@ -38,8 +38,8 @@ function Main() {
                                 <h1 className="title">Recent Reviews</h1>
                             </div>
                         </div>
-                        {recentReviews.map(rwa => {
-                            return <Review key={rwa.review.id} artist={rwa.artist} album={rwa.album} review={rwa.review}/>
+                        {recentReviews.map(dto => {
+                            return <Review key={dto.review.id} reviewDto={dto}/>
                         })}
                     </div>
                 </div>

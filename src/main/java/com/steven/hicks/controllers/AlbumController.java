@@ -1,14 +1,11 @@
 package com.steven.hicks.controllers;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.album.Album;
-import com.steven.hicks.models.dtos.AlbumReviewsArtist;
-import com.steven.hicks.models.dtos.ReviewWithAlbumAndAverage;
+import com.steven.hicks.models.dtos.AlbumArtistReviewsDTO;
+import com.steven.hicks.models.dtos.ReviewDTO;
 import com.steven.hicks.services.AlbumService;
 import com.steven.hicks.services.JwtTokenService;
-import com.steven.hicks.services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -26,12 +23,7 @@ public class AlbumController {
     @Autowired
     private AlbumService m_albumService;
     @Autowired
-    private ReviewService m_reviewService;
-    @Autowired
     private JwtTokenService m_jwtTokenService;
-
-    private ObjectMapper m_objectMapper = new ObjectMapper();
-    private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
     @GetMapping("/artist/{artistMbid}")
     public List<Album> getAlbumsForArtist(@PathVariable String artistMbid) {
@@ -40,19 +32,18 @@ public class AlbumController {
     }
 
     @GetMapping("/{albumMbid}")
-    public AlbumReviewsArtist getAlbum(@PathVariable String albumMbid, ServletRequest request) throws Exception {
+    public AlbumArtistReviewsDTO getAlbum(@PathVariable String albumMbid, ServletRequest request) throws Exception {
         User user = null;
         try
         {
             user = m_jwtTokenService.getUserFromToken((HttpServletRequest) request);
         } catch (Exception e)
-        {
-        }
+        { }
         return m_albumService.getAlbumReviewArtistDTO(albumMbid, user);
     }
 
     @GetMapping("/topRated")
-    public List<ReviewWithAlbumAndAverage> getTopRated() throws Exception {
+    public List<ReviewDTO> getTopRated() {
        return m_albumService.getTopRated();
     }
 }

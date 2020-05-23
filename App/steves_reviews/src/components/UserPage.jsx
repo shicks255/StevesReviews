@@ -22,29 +22,28 @@ export default function UserPage(props) {
         const userStatsResult = await fetch('/api/user/stats/' + id);
         const userStats = await userStatsResult.json();
         setUserStats(userStats);
-        console.log(userStats);
     }
 
     async function fetchUser() {
         const userResult = await fetch('/api/user/' + id);
         const user = await userResult.json();
         setUser(user);
-        console.log(user);
     }
 
     async function fetchReviews() {
         const reviewResult = await fetch('/api/review/user/' + id);
         const reviews = await reviewResult.json();
-        console.log(reviews);
         setReviews(reviews);
     }
 
     if (loading)
         return (
-            <div>
-                loading
-            </div>
-        )
+            <>
+                <br/>
+                <i className='fas fa-4x fa-stroopwafel fa-spin'></i>
+                <br/>
+                <br/>
+            </>)
 
     return (
         <div className='columns'>
@@ -59,7 +58,7 @@ export default function UserPage(props) {
                 </div>
                 {
                     reviews.map(rwa => {
-                        return <Review key={rwa.review.id} artist={rwa.artist} album={rwa.album} review={rwa.review}/>
+                        return <Review key={rwa.review.id} reviewDto={rwa}/>
                     })
                 }
             </div>

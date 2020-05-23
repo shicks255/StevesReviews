@@ -34,7 +34,7 @@ export default function TopRated() {
                 <table className="table">
                     <tbody>
                     {albumsAndRatings.map((ar, index) => {
-                        return <Review rank={index} colorClass={ar.colorClass} rating={ar.average} review={ar.reviewWithAlbum.review} album={ar.reviewWithAlbum.album} artist={ar.reviewWithAlbum.artist}/>
+                        return <Review rank={index} reviewDto={ar} />
                     })};
                     </tbody>
                 </table>

@@ -1,6 +1,5 @@
 package com.steven.hicks.services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steven.hicks.logic.musicBrainz.MBAlbumSearcher;
@@ -9,10 +8,8 @@ import com.steven.hicks.models.Track;
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.artist.Artist;
-import com.steven.hicks.models.dtos.AlbumReviewsArtist;
+import com.steven.hicks.models.dtos.AlbumArtistReviewsDTO;
 import com.steven.hicks.models.dtos.ReviewDTO;
-import com.steven.hicks.models.dtos.ReviewWithAlbum;
-import com.steven.hicks.models.dtos.ReviewWithAlbumAndAverage;
 import com.steven.hicks.repositories.AlbumRepository;
 import com.steven.hicks.repositories.ArtistRepository;
 import com.steven.hicks.repositories.TrackRepository;
@@ -43,51 +40,16 @@ public class AlbumService {
 
     private MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
 
+    /**
+     * Get album by ID.  Also if tracks is null or empty tries to get tracks.
+     * @param id
+     * @return
+     */
     public Album getById(String id) {
         Album album = m_albumRepository.findById(id).orElseThrow();
 
-        if (album.getTracks() == null || album.getTracks().isEmpty()) {
-            JsonNode releases = m_mbAlbumSearcher.getReleasesByReleaseGroup(id);
-            String releaseId = "";
-            String oldest = "3000-12-31";
-
-            for (Iterator<JsonNode> it = releases.iterator(); it.hasNext(); ) {
-                JsonNode release = it.next();
-
-                String releaseDate = release.has("date") ? release.get("date").asText() : "3000-12-31";
-                if (releaseDate.length() < 5)
-                    releaseDate += "-12-31";
-                if (oldest.equals("3000") || releaseDate.compareTo(oldest) < 0) {
-                    oldest = releaseDate;
-                    releaseId = release.get("id").asText();
-                }
-            }
-
-            Map<Integer, JsonNode> tracksMap = m_mbAlbumSearcher.getTrackz(releaseId);
-            if (tracksMap != null) {
-                List<Track> trackList = new ArrayList<>();
-                for (Map.Entry<Integer, JsonNode> es : tracksMap.entrySet()) {
-                    JsonNode tracks = es.getValue();
-                    for (Iterator<JsonNode> iterator = tracks.iterator(); iterator.hasNext(); ) {
-                        JsonNode track = iterator.next();
-
-                        Track tracksToAdd = new Track();
-                        tracksToAdd.setAlbum(album);
-                        tracksToAdd.setLength(track.get("length").asLong());
-                        tracksToAdd.setNumber(track.get("number").asText());
-                        tracksToAdd.setPosition(track.get("position").asInt());
-                        tracksToAdd.setTitle(track.get("title").asText());
-                        tracksToAdd.setDisc(es.getKey());
-                        trackList.add(tracksToAdd);
-                    }
-
-                    m_trackRepository.saveAll(trackList);
-                    album.setTracks(trackList);
-                }
-            }
-
-            System.out.println(tracksMap);
-        }
+        if (album.getTracks() == null || album.getTracks().isEmpty())
+            createTracksIfEmpty(album);
 
         return album;
     }
@@ -96,7 +58,7 @@ public class AlbumService {
         return m_albumRepository.findAllByArtistIdOrderByReleaseDate(artistId);
     }
 
-    public AlbumReviewsArtist getAlbumReviewArtistDTO(String albumId, User user) {
+    public AlbumArtistReviewsDTO getAlbumReviewArtistDTO(String albumId, User user) {
         Album album = getById(albumId);
         Artist artist = album.getArtist();
         List<ReviewDTO> reviews = m_reviewService.getReviewsForAlbum(albumId);
@@ -104,40 +66,77 @@ public class AlbumService {
 
         if (user != null) {
             ReviewDTO userReview = reviews.stream()
-                    .filter(x -> x.getUser().equals(user))
+                    .filter(x -> x.getReview().getUser().equals(user))
                     .findFirst()
                     .orElse(null);
             if (userReview != null)
-                reviews.removeIf(x -> x.getId() == userReview.getId());
-            return new AlbumReviewsArtist(artist, reviews, rating, album, userReview);
+                reviews.removeIf(x -> x.getReview().getId() == userReview.getReview().getId());
+            return new AlbumArtistReviewsDTO(artist, reviews, rating, album, userReview);
         }
 
-        return new AlbumReviewsArtist(artist, reviews, rating, album, null);
+        return new AlbumArtistReviewsDTO(artist, reviews, rating, album, null);
     }
 
-    public List<ReviewWithAlbumAndAverage> getTopRated() {
-        List<ReviewWithAlbumAndAverage> albumWithReviews = m_jdbcTemplate.query("select album_id,avg(rating)as avrg from reviews group by album_id order by avrg desc limit 10;",
+    public List<ReviewDTO> getTopRated() {
+        List<ReviewDTO> albumWithReviews = m_jdbcTemplate.query("select album_id,avg(rating)as avrg from reviews group by album_id order by avrg desc limit 10;",
                 (rs, num) -> {
                     String albumId = rs.getString("album_id");
                     double rating = rs.getDouble("avrg");
                     Review review = m_reviewService.findFirstByAlbumIdOrderByRatingDesc(albumId);
-                    Album album = getById(albumId);
-                    try
-                    {
-                        String json = m_objectMapper.writeValueAsString(album);
-                        JsonNode node = m_objectMapper.readTree(json);
-                        JsonNode art = m_objectMapper.readTree(m_objectMapper.writeValueAsString(album.getArtist()));
-                        ReviewDTO reviewDTO = new ReviewDTO(review);
-
-                        ReviewWithAlbum rwa = new ReviewWithAlbum(node, reviewDTO, art);
-                        return new ReviewWithAlbumAndAverage(rwa, rating);
-                    } catch (JsonProcessingException e)
-                    {
-                        e.printStackTrace();
-                        return null;
-                    }
+                    ReviewDTO reviewDTO = new ReviewDTO(review);
+                    reviewDTO.setRating(rating);
+                    return reviewDTO;
                 });
 
         return albumWithReviews;
+    }
+
+    /**
+     * Get tracks if they are null or empty
+     * Iterate through each <b>Release</b>, to find the oldest dated one.
+     * Then get the tracks for that release.
+     *
+     * This method is implemented this way because the oldest album should have the best
+     * 'base' track list, whereas a newer version might have extra tracks, etc.
+     * @param album
+     */
+    private void createTracksIfEmpty(Album album) {
+        JsonNode releases = m_mbAlbumSearcher.getReleasesByReleaseGroup(album.getId());
+        String releaseId = "";
+        String oldest = "3000-12-31";
+
+        for (Iterator<JsonNode> it = releases.iterator(); it.hasNext(); ) {
+            JsonNode release = it.next();
+            String releaseDate = release.has("date") ? release.get("date").asText() : "3000-12-31";
+            if (releaseDate.length() < 5)
+                releaseDate += "-12-31";
+            if (oldest.equals("3000") || releaseDate.compareTo(oldest) < 0) {
+                oldest = releaseDate;
+                releaseId = release.get("id").asText();
+            }
+        }
+
+        Map<Integer, JsonNode> tracksMap = m_mbAlbumSearcher.getTrackz(releaseId);
+        if (tracksMap != null) {
+            List<Track> trackList = new ArrayList<>();
+            for (Map.Entry<Integer, JsonNode> es : tracksMap.entrySet()) {
+                JsonNode tracks = es.getValue();
+                for (Iterator<JsonNode> iterator = tracks.iterator(); iterator.hasNext(); ) {
+                    JsonNode track = iterator.next();
+
+                    Track tracksToAdd = new Track();
+                    tracksToAdd.setAlbum(album);
+                    tracksToAdd.setLength(track.get("length").asLong());
+                    tracksToAdd.setNumber(track.get("number").asText());
+                    tracksToAdd.setPosition(track.get("position").asInt());
+                    tracksToAdd.setTitle(track.get("title").asText());
+                    tracksToAdd.setDisc(es.getKey());
+                    trackList.add(tracksToAdd);
+                }
+
+                m_trackRepository.saveAll(trackList);
+                album.setTracks(trackList);
+            }
+        }
     }
 }

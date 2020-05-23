@@ -1,5 +1,8 @@
 package com.steven.hicks.models;
 
+import com.fasterxml.jackson.annotation.*;
+import com.steven.hicks.models.album.Album;
+
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.Objects;
@@ -12,20 +15,20 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
-//    @OneToOne
-//    @JoinColumn(name = "album_id")
-//    private Album album;
-
-    private String albumId;
+    @OneToOne
+    @JoinColumn(name = "album_id")
+    private Album album;
 
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
 
     @Column(name = "added_on")
+    @JsonFormat(pattern = "MMMM dd, yyyy")
     private LocalDateTime addedOn;
 
     @Column(name = "last_updated")
+    @JsonFormat(pattern = "MMMM dd, yyyy")
     private LocalDateTime lastUpdated;
 
     private String content;
@@ -33,7 +36,7 @@ public class Review {
 
     @Override
     public String toString() {
-        return String.format("Review ");
+        return String.format("Review %d %s", id, album.getTitle());
     }
 
     @Override
@@ -57,21 +60,12 @@ public class Review {
         this.id = id;
     }
 
-//    public Album getAlbum() {
-//        return album;
-//    }
-//
-//    public void setAlbum(Album album) {
-//        this.album = album;
-//    }
-
-
-    public String getAlbumId() {
-        return albumId;
+    public Album getAlbum() {
+        return album;
     }
 
-    public void setAlbumId(String albumId) {
-        this.albumId = albumId;
+    public void setAlbum(Album album) {
+        this.album = album;
     }
 
     public User getUser() {
@@ -113,4 +107,5 @@ public class Review {
     public void setLastUpdated(LocalDateTime lastUpdated) {
         this.lastUpdated = lastUpdated;
     }
+
 }
