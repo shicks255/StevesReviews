@@ -16,6 +16,28 @@ import UserPage from "./components/UserPage";
 
 export default function App() {
 
+    document.addEventListener('keyup', (e) => {
+        if (e.keyCode === 27) {
+            const modal = document.getElementById('myModal');
+            if (modal)
+                modal.classList.remove('is-active');
+
+            const hamburger = document.getElementById('navbarLinks');
+            if (hamburger)
+                hamburger.classList.remove('is-active');
+        }
+    });
+
+    document.addEventListener('click', (e) => {
+        const nav = document.getElementById('navbar');
+
+        if (e.target !== nav && !nav.contains(e.target)) {
+            const hamburger = document.getElementById('navbarLinks');
+            if (hamburger)
+                hamburger.classList.remove('is-active');
+        }
+    })
+
     return (
         <div className="App">
             <Header />

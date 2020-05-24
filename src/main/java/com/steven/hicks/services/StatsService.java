@@ -67,7 +67,7 @@ public class StatsService {
 
         String lastReviewDate = reviews.stream()
                 .findFirst()
-                .map(x -> x.getAddedOn().toLocalDate().format(DateTimeFormatter.ofPattern("MM/dd/yyyy")))
+                .map(x -> x.getAddedOn().toLocalDate().format(DateTimeFormatter.ofPattern("MMMM dd, yyyy")))
                 .orElse("");
 
         return new UserStats(reviews.size(), fiveStars, averageReview, averageLength, lastReviewDate);

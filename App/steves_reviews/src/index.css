@@ -86,3 +86,7 @@ button:active {
   padding: 5px;
   height: 100%;
 }
+
+.modal-close::before {
+  width: 25% !important;
+}

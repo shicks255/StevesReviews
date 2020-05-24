@@ -7,6 +7,8 @@ import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.services.StatsService;
 import com.steven.hicks.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -48,10 +50,15 @@ public class UserController {
     }
 
     @PostMapping("/register")
-    public void register(@RequestBody UserLogin user) {
+    public ResponseEntity<String> register(@RequestBody UserLogin user) {
         User newUser = new User();
         newUser.setUsername(user.getUsername());
         newUser.setPassword(user.getPassword());
-        m_userService.registerUser(newUser);
+        String result = m_userService.registerUser(newUser);
+
+        if (result.equals("Thanks for signing up!"))
+            return ResponseEntity.ok(result);
+
+        return new ResponseEntity<>(result, HttpStatus.BAD_REQUEST);
     }
 }

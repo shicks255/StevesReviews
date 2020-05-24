@@ -3,7 +3,7 @@ import { UserContext } from "./UserContext";
 import { Link } from 'react-router-dom';
 import Logo from '../images/StevesMusicReviews.png';
 
-export default function Header() {
+export default function Header(props) {
 
     const context = useContext(UserContext);
 
@@ -33,7 +33,7 @@ export default function Header() {
 
     return (
         <header>
-            <nav className="navbar is-light" role="navigation" aria-label="main navigation">
+            <nav id='navbar' className="navbar is-light" role="navigation" aria-label="main navigation">
                 <div className="navbar-brand">
                     <div className="navbar-item">
                         <Link to="/">
@@ -58,7 +58,6 @@ export default function Header() {
                         <div className="navbar-item">
                             <Link to="/topRated">Top Rated</Link>
                         </div>
-                        {/*@if(session.get("userId").nonEmpty) {*/}
                         {!context.loggedIn &&
                         <div className="navbar-item">
                             <Link to="/login">Login/Register</Link>
@@ -67,7 +66,6 @@ export default function Header() {
                         {context.loggedIn &&
                         <>
                             <div className="navbar-item">
-                                {/*<a onClick={ensureLoggedIn} >My Account</a>*/}
                                 <Link to={'/myAccount'}>My Account</Link>
                             </div>
                             <div className="navbar-item">

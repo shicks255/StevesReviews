@@ -87,7 +87,6 @@ public class JwtTokenService {
             }
 
             return true;
-
         } catch (UsernameNotFoundException e) {
             throw new UsernameNotFoundException("Username not found");
         }

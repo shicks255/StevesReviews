@@ -16,12 +16,13 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
+    @Column(unique = true)
     private String username;
     @JsonIgnore
     private String password;
     @Column(name = "email_list")
     private boolean emailList;
-    @Column(name = "email_address")
+    @Column(name = "email_address", unique = true)
     private String emailAddress;
     @Column(name = "is_admin")
     private boolean admin;

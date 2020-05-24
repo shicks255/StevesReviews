@@ -41,7 +41,7 @@ public class Job {
     @Value("${fanArtKey}")
     private String FAN_ART_KEY = "";
 
-    @Scheduled(initialDelay = 5_000, fixedDelay = 1000*60*30)
+    @Scheduled(initialDelay = 5_000, fixedDelay = 1000*60*15)
     public void doStuff() {
         //First make sure all artists are in the sync table
         List<Artist> artists = m_artistService.getAllArtists();
@@ -153,61 +153,81 @@ public class Job {
         if (x.has("back") && x.get("back").asText().equals("true"))
             text = "back";
 
-        AlbumImage main = new AlbumImage();
-        main.setAlbum(album);
-        main.setSize("main");
-        main.setText(text);
-        main.setUrl(x.get("image").asText());
-        albumImages.add(main);
+        if (x.has("types")) {
+            JsonNode types = x.get("types");
+            for (Iterator<JsonNode> it = types.iterator(); it.hasNext(); ) {
+                String type = it.next().asText();
+                if (type.equalsIgnoreCase("booklet"))
+                    text = "booklet";
+                if (type.equalsIgnoreCase("sping"))
+                    text = "spine";
+                if (type.equalsIgnoreCase("tray"))
+                    text = "tray";
+                if (type.equalsIgnoreCase("medium"))
+                    text = "medium";
+                if (type.equalsIgnoreCase("other"))
+                    text = "other";
+            }
+        }
 
-        //now do thumbnail images
-        if (x.has("thumbnails"))
+        if (text.length() > 0)
         {
-            JsonNode thumbnails = x.get("thumbnails");
-            if (thumbnails.has("250"))
+            AlbumImage main = new AlbumImage();
+            main.setAlbum(album);
+            main.setSize("main");
+            main.setText(text);
+            main.setUrl(x.get("image").asText());
+            albumImages.add(main);
+
+            //now do thumbnail images
+            if (x.has("thumbnails"))
             {
-                AlbumImage thum_250 = new AlbumImage();
-                thum_250.setSize("250");
-                thum_250.setAlbum(album);
-                thum_250.setText(text);
-                thum_250.setUrl(thumbnails.get("250").asText());
-                albumImages.add(thum_250);
-            }
-            if (thumbnails.has("500"))
-            {
-                AlbumImage thumb_500 = new AlbumImage();
-                thumb_500.setSize("500");
-                thumb_500.setAlbum(album);
-                thumb_500.setText(text);
-                thumb_500.setUrl(thumbnails.get("500").asText());
-                albumImages.add(thumb_500);
-            }
-            if (thumbnails.has("1200"))
-            {
-                AlbumImage thum_1200 = new AlbumImage();
-                thum_1200.setSize("1200");
-                thum_1200.setAlbum(album);
-                thum_1200.setText(text);
-                thum_1200.setUrl(thumbnails.get("1200").asText());
-                albumImages.add(thum_1200);
-            }
-            if (thumbnails.has("large"))
-            {
-                AlbumImage thum_large = new AlbumImage();
-                thum_large.setSize("large");
-                thum_large.setAlbum(album);
-                thum_large.setText(text);
-                thum_large.setUrl(thumbnails.get("large").asText());
-                albumImages.add(thum_large);
-            }
-            if (thumbnails.has(("small")))
-            {
-                AlbumImage thumb_small = new AlbumImage();
-                thumb_small.setSize("small");
-                thumb_small.setAlbum(album);
-                thumb_small.setText(text);
-                thumb_small.setUrl(thumbnails.get("small").asText());
-                albumImages.add(thumb_small);
+                JsonNode thumbnails = x.get("thumbnails");
+                if (thumbnails.has("250"))
+                {
+                    AlbumImage thum_250 = new AlbumImage();
+                    thum_250.setSize("250");
+                    thum_250.setAlbum(album);
+                    thum_250.setText(text);
+                    thum_250.setUrl(thumbnails.get("250").asText());
+                    albumImages.add(thum_250);
+                }
+                if (thumbnails.has("500"))
+                {
+                    AlbumImage thumb_500 = new AlbumImage();
+                    thumb_500.setSize("500");
+                    thumb_500.setAlbum(album);
+                    thumb_500.setText(text);
+                    thumb_500.setUrl(thumbnails.get("500").asText());
+                    albumImages.add(thumb_500);
+                }
+                if (thumbnails.has("1200"))
+                {
+                    AlbumImage thum_1200 = new AlbumImage();
+                    thum_1200.setSize("1200");
+                    thum_1200.setAlbum(album);
+                    thum_1200.setText(text);
+                    thum_1200.setUrl(thumbnails.get("1200").asText());
+                    albumImages.add(thum_1200);
+                }
+                if (thumbnails.has("large"))
+                {
+                    AlbumImage thum_large = new AlbumImage();
+                    thum_large.setSize("large");
+                    thum_large.setAlbum(album);
+                    thum_large.setText(text);
+                    thum_large.setUrl(thumbnails.get("large").asText());
+                    albumImages.add(thum_large);
+                }
+                if (thumbnails.has(("small")))
+                {
+                    AlbumImage thumb_small = new AlbumImage();
+                    thumb_small.setSize("small");
+                    thumb_small.setAlbum(album);
+                    thumb_small.setText(text);
+                    thumb_small.setUrl(thumbnails.get("small").asText());
+                    albumImages.add(thumb_small);
+                }
             }
         }
     }
