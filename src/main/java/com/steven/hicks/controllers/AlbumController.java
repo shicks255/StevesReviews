@@ -34,16 +34,15 @@ public class AlbumController {
     @GetMapping("/{albumMbid}")
     public AlbumArtistReviewsDTO getAlbum(@PathVariable String albumMbid, ServletRequest request) throws Exception {
         User user = null;
-        try
-        {
+        try {
             user = m_jwtTokenService.getUserFromToken((HttpServletRequest) request);
-        } catch (Exception e)
-        { }
+        } catch (Exception e) {
+        }
         return m_albumService.getAlbumReviewArtistDTO(albumMbid, user);
     }
 
     @GetMapping("/topRated")
     public List<ReviewDTO> getTopRated() {
-       return m_albumService.getTopRated();
+        return m_albumService.getTopRated();
     }
 }

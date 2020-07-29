@@ -1,5 +1,7 @@
 package com.steven.hicks.controllers;
 
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.album.Album;
@@ -12,16 +14,20 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.time.LocalDateTime;
 import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
+import static org.springframework.http.MediaType.*;
+import static org.springframework.test.web.servlet.ResultMatcher.matchAll;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 @WebMvcTest(AlbumController.class)
 public class AlbumControllerTest {
@@ -36,19 +42,34 @@ public class AlbumControllerTest {
     private JwtTokenService m_jwtTokenService;
 
     @MockBean
-    UserDetailsService m_userDetailsService;
+    private UserDetailsService m_userDetailsService;
+
+    @Autowired
+    private ObjectMapper m_objectMapper;
 
     @Test
-    public void shouldReturnDefaultMessage() throws Exception {
+    public void shouldReturnTopRated() throws Exception {
 
         List<ReviewDTO> reviewDTOList = Arrays.asList(getReviewDTO());
         when(m_albumService.getTopRated())
                 .thenReturn(reviewDTOList);
 
+        String json = m_objectMapper.writeValueAsString(reviewDTOList);
+
         m_mockMvc
                 .perform(get("/api/album/topRated"))
                 .andDo(print())
-                .andExpect(status().isOk());
+                .andExpect(
+                        matchAll(
+                                status().isOk(),
+                                content().contentType(APPLICATION_JSON),
+                                content().json(json)
+                        ));
+    }
+
+    @Test
+    public void shouldGetAlbum() {
+
     }
 
     private static ReviewDTO getReviewDTO() {

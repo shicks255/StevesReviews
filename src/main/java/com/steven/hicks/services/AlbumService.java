@@ -42,6 +42,7 @@ public class AlbumService {
 
     /**
      * Get album by ID.  Also if tracks is null or empty tries to get tracks.
+     *
      * @param id
      * @return
      */
@@ -78,15 +79,16 @@ public class AlbumService {
     }
 
     public List<ReviewDTO> getTopRated() {
-        List<ReviewDTO> albumWithReviews = m_jdbcTemplate.query("select album_id,avg(rating)as avrg from reviews group by album_id order by avrg desc limit 10;",
-                (rs, num) -> {
-                    String albumId = rs.getString("album_id");
-                    double rating = rs.getDouble("avrg");
-                    Review review = m_reviewService.findFirstByAlbumIdOrderByRatingDesc(albumId);
-                    ReviewDTO reviewDTO = new ReviewDTO(review);
-                    reviewDTO.setRating(rating);
-                    return reviewDTO;
-                });
+        List<ReviewDTO> albumWithReviews =
+                m_jdbcTemplate.query("select album_id,avg(rating)as avrg from reviews group by album_id order by avrg desc limit 10;",
+                        (rs, num) -> {
+                            String albumId = rs.getString("album_id");
+                            double rating = rs.getDouble("avrg");
+                            Review review = m_reviewService.findFirstByAlbumIdOrderByRatingDesc(albumId);
+                            ReviewDTO reviewDTO = new ReviewDTO(review);
+                            reviewDTO.setRating(rating);
+                            return reviewDTO;
+                        });
 
         return albumWithReviews;
     }
@@ -95,9 +97,10 @@ public class AlbumService {
      * Get tracks if they are null or empty
      * Iterate through each <b>Release</b>, to find the oldest dated one.
      * Then get the tracks for that release.
-     *
+     * <p>
      * This method is implemented this way because the oldest album should have the best
      * 'base' track list, whereas a newer version might have extra tracks, etc.
+     *
      * @param album
      */
     private void createTracksIfEmpty(Album album) {
