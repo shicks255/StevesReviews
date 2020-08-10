@@ -11,6 +11,7 @@ import com.steven.hicks.models.artist.ArtistImage;
 import com.steven.hicks.repositories.*;
 import com.steven.hicks.services.AlbumService;
 import com.steven.hicks.services.ArtistService;
+import io.micrometer.core.instrument.MeterRegistry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -34,6 +35,8 @@ public class Job {
     AlbumImageRepository m_albumImageRepository;
     @Autowired
     ArtistSyncRepository m_artistSyncRepository;
+    @Autowired
+    MeterRegistry m_meterRegistry;
 
     MBArtistSearcher m_mbArtistSearcher = new MBArtistSearcher();
     MBAlbumSearcher m_mbAlbumSearcher = new MBAlbumSearcher();
@@ -43,15 +46,17 @@ public class Job {
 
     @Scheduled(initialDelay = 5_000, fixedDelay = 1000*60*15)
     public void doStuff() {
+        m_meterRegistry.counter("artistSync").increment();
+
         //First make sure all artists are in the sync table
         List<Artist> artists = m_artistService.getAllArtists();
         for (Artist x : artists)
         {
-            ArtistSync sync = m_artistSyncRepository.findById(x.getId()).orElseGet(() -> {
+            if (!m_artistSyncRepository.existsById(x.getId())) {
                 ArtistSync newSync = new ArtistSync();
                 newSync.setArtistId(x.getId());
-                return m_artistSyncRepository.save(newSync);
-            });
+                m_artistSyncRepository.save(newSync);
+            }
         }
 
         //Get the oldest artist_sync record, or a null
@@ -87,7 +92,7 @@ public class Job {
             }
 
             //get any new albums
-            JsonNode albums = m_mbAlbumSearcher.getAlbumsForArtist(artistToSync, 0);
+            JsonNode albums = m_mbAlbumSearcher.searchForAlbumsByArtist(artistToSync, 0);
             List<Album> albumSet = new ArrayList<>();
             List<AlbumImage> albumImages = new ArrayList<>();
             for (Iterator<JsonNode> it = albums.iterator(); it.hasNext(); )

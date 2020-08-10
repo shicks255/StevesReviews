@@ -110,6 +110,9 @@ public class AlbumService {
 
         for (Iterator<JsonNode> it = releases.iterator(); it.hasNext(); ) {
             JsonNode release = it.next();
+            if (releaseId.isEmpty())
+                releaseId = release.get("id").asText();
+
             String releaseDate = release.has("date") ? release.get("date").asText() : "3000-12-31";
             if (releaseDate.length() < 5)
                 releaseDate += "-12-31";
