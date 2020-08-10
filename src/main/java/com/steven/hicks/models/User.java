@@ -1,16 +1,19 @@
 package com.steven.hicks.models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-public class User implements UserDetails {
+@EntityListeners(AuditingEntityListener.class)
+public class User extends AuditClass implements UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

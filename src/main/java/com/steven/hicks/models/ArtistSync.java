@@ -11,7 +11,6 @@ public class ArtistSync {
 
     @Id
     private String artistId;
-
     private LocalDateTime lastSync;
 
     public String getArtistId() {

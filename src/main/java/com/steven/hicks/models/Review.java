@@ -1,15 +1,15 @@
 package com.steven.hicks.models;
 
-import com.fasterxml.jackson.annotation.*;
 import com.steven.hicks.models.album.Album;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import javax.persistence.*;
-import java.time.LocalDateTime;
 import java.util.Objects;
 
 @Entity
 @Table(name = "reviews")
-public class Review {
+@EntityListeners(AuditingEntityListener.class)
+public class Review extends AuditClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,14 +22,6 @@ public class Review {
     @OneToOne
     @JoinColumn(name = "user_id")
     private User user;
-
-    @Column(name = "added_on")
-    @JsonFormat(pattern = "MMMM dd, yyyy")
-    private LocalDateTime addedOn;
-
-    @Column(name = "last_updated")
-    @JsonFormat(pattern = "MMMM dd, yyyy")
-    private LocalDateTime lastUpdated;
 
     private String content;
     private float rating;
@@ -76,14 +68,6 @@ public class Review {
         this.user = user;
     }
 
-    public LocalDateTime getAddedOn() {
-        return addedOn;
-    }
-
-    public void setAddedOn(LocalDateTime addedOn) {
-        this.addedOn = addedOn;
-    }
-
     public String getContent() {
         return content;
     }
@@ -98,14 +82,6 @@ public class Review {
 
     public void setRating(float rating) {
         this.rating = rating;
-    }
-
-    public LocalDateTime getLastUpdated() {
-        return lastUpdated;
-    }
-
-    public void setLastUpdated(LocalDateTime lastUpdated) {
-        this.lastUpdated = lastUpdated;
     }
 
 }

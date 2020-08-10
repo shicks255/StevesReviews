@@ -10,7 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "tracks")
-public class Track implements Serializable {
+public class Track extends AuditClass implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)

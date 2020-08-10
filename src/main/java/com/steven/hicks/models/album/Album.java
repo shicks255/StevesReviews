@@ -1,6 +1,7 @@
 package com.steven.hicks.models.album;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.steven.hicks.models.AuditClass;
 import com.steven.hicks.models.Track;
 import com.steven.hicks.models.artist.Artist;
 
@@ -10,7 +11,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "albums")
-public class Album {
+public class Album extends AuditClass {
 
     @Id
     private String id = "";

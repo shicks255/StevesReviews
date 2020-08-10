@@ -11,7 +11,8 @@ public class CatchAllController {
             "/album/**",
             "/topRated",
             "/user/**",
-            "/search"
+            "/search",
+            "/visitor"
     })
     public String catchAll() {
         return "forward:/";

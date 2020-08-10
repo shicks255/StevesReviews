@@ -1,5 +1,6 @@
 package com.steven.hicks.models.artist;
 
+import com.steven.hicks.models.AuditClass;
 import com.steven.hicks.models.album.Album;
 
 import javax.persistence.*;
@@ -8,7 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "artists")
-public class Artist {
+public class Artist extends AuditClass {
 
     @Id
     private String id;

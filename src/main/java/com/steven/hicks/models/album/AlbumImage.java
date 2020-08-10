@@ -1,13 +1,14 @@
 package com.steven.hicks.models.album;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.steven.hicks.models.AuditClass;
 
 import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
 @Table(name = "album_images")
-public class AlbumImage {
+public class AlbumImage extends AuditClass {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
