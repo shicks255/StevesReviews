@@ -54,6 +54,8 @@ public class AlbumController {
                         Tag.of("album", dto.getAlbum().getTitle())
                 )
         ).increment();
+
+
         return dto;
     }
 

@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 
 @RestController
@@ -43,7 +44,7 @@ public class ReviewController {
         if (review.getId() == 0)
         {
             review.setUser(user);
-            review.setAddedOn(LocalDateTime.now());
+            review.setAddedOn(LocalDateTime.now(ZoneOffset.UTC));
             m_reviewService.saveReview(review);
         }
         else

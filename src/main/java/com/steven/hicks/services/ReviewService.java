@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -94,7 +95,7 @@ public class ReviewService {
     }
 
     public void updateReview(Review review) {
-        m_reviewRepository.update(review.getContent(), review.getRating(), LocalDateTime.now(), review.getId());
+        m_reviewRepository.update(review.getContent(), review.getRating(), LocalDateTime.now(ZoneOffset.UTC), review.getId());
     }
 
     public void saveReview(Review review) {

@@ -15,9 +15,7 @@ public class VisitorMetrics extends AuditClass {
 
     @Id
     private String ip = "";
-
     long visits;
-
 
     public String getIp() {
         return ip;
