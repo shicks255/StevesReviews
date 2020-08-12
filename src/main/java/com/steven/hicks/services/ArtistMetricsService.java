@@ -11,7 +11,7 @@ public class ArtistMetricsService {
     @Autowired
     private ArtistMetricsRepository m_artistMetricsRepository;
 
-    public void upsertArtistMetrics(String id) {
+    public void upsertArtistMetrics(String id, String name) {
         if (m_artistMetricsRepository.existsById(id)) {
             ArtistMetrics visitor = m_artistMetricsRepository.getOne(id);
             visitor.setHits(visitor.getHits() + 1);
@@ -20,6 +20,7 @@ public class ArtistMetricsService {
             ArtistMetrics metrics = new ArtistMetrics();
             metrics.setId(id);
             metrics.setHits(1);
+            metrics.setName(name);
             m_artistMetricsRepository.save(metrics);
         }
     }

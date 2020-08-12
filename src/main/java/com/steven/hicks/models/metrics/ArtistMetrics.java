@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Entity
 @EntityListeners(AuditingEntityListener.class)
-@Table(name = "album_metrics")
+@Table(name = "artist_metrics")
 public class ArtistMetrics extends AuditClass {
 
     @Id

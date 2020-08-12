@@ -3,6 +3,7 @@ package com.steven.hicks.controllers;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.steven.hicks.logic.musicBrainz.MBArtistSearcher;
 import com.steven.hicks.models.artist.Artist;
+import com.steven.hicks.services.ArtistMetricsService;
 import com.steven.hicks.services.ArtistService;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
@@ -20,9 +21,8 @@ public class ArtistController {
 
     @Autowired
     ArtistService m_artistService;
-
     @Autowired
-    MeterRegistry m_meterRegistry;
+    ArtistMetricsService m_artistMetricsService;
 
     private MBArtistSearcher m_mbArtistSearcher = new MBArtistSearcher();
 
@@ -31,23 +31,18 @@ public class ArtistController {
         Artist artist = m_artistService.getArtist(id);
         artist.getImages();
 
-        m_meterRegistry.counter("artistHits",
-                Arrays.asList(
-                        Tag.of("artist", artist.getName())
-                )
-        ).increment();
-
+        m_artistMetricsService.upsertArtistMetrics(id, artist.getName());
         return artist;
     }
 
     @GetMapping("/search/{searchTerms}")
     public JsonNode searchForArtist(@PathVariable String searchTerms) {
 
-        m_meterRegistry.counter("artistSearch",
-                Arrays.asList(
-                        Tag.of("searchTerms", searchTerms)
-                )
-        ).increment();
+//        m_meterRegistry.counter("artistSearch",
+//                Arrays.asList(
+//                        Tag.of("searchTerms", searchTerms)
+//                )
+//        ).increment();
 
         JsonNode artistSearchResults = m_mbArtistSearcher.searchForArtist(searchTerms);
         return artistSearchResults;
