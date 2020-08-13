@@ -5,6 +5,7 @@ import com.steven.hicks.logic.musicBrainz.MBArtistSearcher;
 import com.steven.hicks.models.artist.Artist;
 import com.steven.hicks.services.ArtistMetricsService;
 import com.steven.hicks.services.ArtistService;
+import com.steven.hicks.services.SearchMetricsService;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Tag;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,8 @@ public class ArtistController {
     ArtistService m_artistService;
     @Autowired
     ArtistMetricsService m_artistMetricsService;
+    @Autowired
+    SearchMetricsService m_searchMetricsService;
 
     private MBArtistSearcher m_mbArtistSearcher = new MBArtistSearcher();
 
@@ -38,14 +41,8 @@ public class ArtistController {
     @GetMapping("/search/{searchTerms}")
     public JsonNode searchForArtist(@PathVariable String searchTerms) {
 
-//        m_meterRegistry.counter("artistSearch",
-//                Arrays.asList(
-//                        Tag.of("searchTerms", searchTerms)
-//                )
-//        ).increment();
-
+        m_searchMetricsService.upsert(searchTerms);
         JsonNode artistSearchResults = m_mbArtistSearcher.searchForArtist(searchTerms);
         return artistSearchResults;
     }
-
 }
