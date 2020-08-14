@@ -17,5 +17,4 @@ public class CatchAllController {
     public String catchAll() {
         return "forward:/";
     }
-
 }

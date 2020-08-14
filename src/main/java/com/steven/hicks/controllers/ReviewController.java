@@ -1,5 +1,6 @@
 package com.steven.hicks.controllers;
 
+import com.steven.hicks.aspects.Logged;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.dtos.ReviewDTO;
@@ -23,22 +24,26 @@ public class ReviewController {
     JwtTokenService m_jwtTokenService;
 
     @GetMapping("/recent")
+    @Logged
     public List<ReviewDTO> getRecentReview() {
         return m_reviewService.getRecentReviews();
     }
 
     @GetMapping("/user")
+    @Logged
     public List<ReviewDTO> getUserReviews(HttpServletRequest request) {
         User user = m_jwtTokenService.getUserFromToken(request);
         return m_reviewService.getReviewsByUser(user.getId());
     }
 
     @GetMapping("/user/{userId}")
+    @Logged
     public List<ReviewDTO> getUserReviews(@PathVariable int userId) {
         return m_reviewService.getReviewsByUser(userId);
     }
 
     @PostMapping("/upsert")
+    @Logged
     public void updateReview(@RequestBody  Review review, HttpServletRequest request) {
         User user = m_jwtTokenService.getUserFromToken(request);
         if (review.getId() == 0)

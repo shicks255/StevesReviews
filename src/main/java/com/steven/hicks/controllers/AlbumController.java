@@ -1,5 +1,6 @@
 package com.steven.hicks.controllers;
 
+import com.steven.hicks.aspects.Logged;
 import com.steven.hicks.models.User;
 import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.dtos.AlbumArtistReviewsDTO;
@@ -30,14 +31,16 @@ public class AlbumController {
     private JwtTokenService m_jwtTokenService;
 
     @GetMapping("/artist/{artistMbid}")
-    @Timed()
+    @Timed
+    @Logged
     public List<Album> getAlbumsForArtist(@PathVariable String artistMbid) {
         List<Album> albums = m_albumService.getAlbumsByArtist(artistMbid);
         return albums;
     }
 
     @GetMapping("/{albumMbid}")
-    @Timed()
+    @Timed
+    @Logged
     public AlbumArtistReviewsDTO getAlbum(@PathVariable String albumMbid, ServletRequest request) throws Exception {
         User user = null;
         try {
@@ -53,6 +56,7 @@ public class AlbumController {
 
     @GetMapping("/topRated")
     @Timed
+    @Logged
     public List<ReviewDTO> getTopRated() {
         return m_albumService.getTopRated();
     }

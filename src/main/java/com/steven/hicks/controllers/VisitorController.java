@@ -20,5 +20,4 @@ public class VisitorController {
         String ip = request.getHeader("x-forwarded-for");
         m_visitorService.upsertVisitor(ip);
     }
-
 }
