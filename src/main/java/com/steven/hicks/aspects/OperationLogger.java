@@ -37,7 +37,7 @@ public class OperationLogger {
                 LocalTime.now()
         };
 
-        logger.info(logInfo.toString(), args);
+        logger.trace(logInfo.toString(), args);
         System.out.println("executing advice");
     }
 }
