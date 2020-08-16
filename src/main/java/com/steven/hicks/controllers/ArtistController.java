@@ -29,7 +29,7 @@ public class ArtistController {
 
     @GetMapping("/{id}")
     @Logged
-    @Timed
+    @Timed()
     public Artist getArtist(@PathVariable("id") String id) {
         Artist artist = m_artistService.getArtist(id);
         artist.getImages();
@@ -40,7 +40,7 @@ public class ArtistController {
 
     @GetMapping("/search/{searchTerms}")
     @Logged
-    @Timed
+    @Timed()
     public JsonNode searchForArtist(@PathVariable String searchTerms) {
 
         m_searchMetricsService.upsert(searchTerms);

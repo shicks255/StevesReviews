@@ -31,7 +31,7 @@ public class AlbumController {
     private JwtTokenService m_jwtTokenService;
 
     @GetMapping("/artist/{artistMbid}")
-    @Timed
+    @Timed()
     @Logged
     public List<Album> getAlbumsForArtist(@PathVariable String artistMbid) {
         List<Album> albums = m_albumService.getAlbumsByArtist(artistMbid);
@@ -39,7 +39,7 @@ public class AlbumController {
     }
 
     @GetMapping("/{albumMbid}")
-    @Timed
+    @Timed()
     @Logged
     public AlbumArtistReviewsDTO getAlbum(@PathVariable String albumMbid, ServletRequest request) throws Exception {
         User user = null;
@@ -55,7 +55,7 @@ public class AlbumController {
     }
 
     @GetMapping("/topRated")
-    @Timed
+    @Timed()
     @Logged
     public List<ReviewDTO> getTopRated() {
         return m_albumService.getTopRated();

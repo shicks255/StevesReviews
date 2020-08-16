@@ -12,6 +12,10 @@ public class VisitorService {
     private VisitorRepository m_visitorRepository;
 
     public void upsertVisitor(String ip) {
+
+        if (ip.contains("192.168") || ip.contains("127.0") || ip.contains("73.44.67.59"))
+            return;
+
         if (m_visitorRepository.existsById(ip)) {
             VisitorMetrics visitor = m_visitorRepository.getOne(ip);
             //todo: only update if haven't updated in last 6 hours
