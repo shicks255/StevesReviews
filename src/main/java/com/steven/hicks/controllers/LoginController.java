@@ -4,6 +4,8 @@ import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.models.dtos.UserLogin;
 import com.steven.hicks.repositories.UserRepository;
 import io.micrometer.core.instrument.MeterRegistry;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class LoginController {
     @Autowired
     MeterRegistry m_meterRegistry;
 
+    Logger m_logger = LoggerFactory.getLogger(LoginController.class);
+
     @PostMapping(value = "/login")
     public ResponseEntity<String> login(@RequestBody UserLogin user) {
         try {
@@ -36,6 +40,7 @@ public class LoginController {
             m_authenticationManager.authenticate(t);
             String token = m_jwtTokenService.createToken(user.getUsername());
 
+            m_logger.info("Successful Login: {}", user.getUsername());
             return ResponseEntity.ok(token);
         }
         catch (Exception e ){
@@ -43,6 +48,7 @@ public class LoginController {
 
             m_meterRegistry.counter("invalidLogin").increment();
 
+            m_logger.info("Invalid Login: {}", user.getUsername());
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
                     .body("Invalid Username/Passowrd");
         }

@@ -5,6 +5,9 @@ import com.steven.hicks.repositories.VisitorRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+
 @Service
 public class VisitorService {
 
@@ -19,6 +22,11 @@ public class VisitorService {
         if (m_visitorRepository.existsById(ip)) {
             VisitorMetrics visitor = m_visitorRepository.getOne(ip);
             //todo: only update if haven't updated in last 6 hours
+
+            if (visitor.getLastUpdated().plusHours(24)
+                    .isAfter(LocalDateTime.now(ZoneOffset.UTC)))
+                return;
+
             visitor.setVisits(visitor.getVisits() + 1);
             m_visitorRepository.save(visitor);
         } else {
