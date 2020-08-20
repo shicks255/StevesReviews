@@ -35,7 +35,7 @@ public class OperationLogger {
         logInfo.append("date={} ");
         logInfo.append("time={} ");
         logInfo.append("user={} ");
-        logInfo.append("sessionid={}");
+        logInfo.append("sessionId={}");
 
         String user = " ";
         String session = " ";

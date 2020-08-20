@@ -24,10 +24,10 @@ export default function App() {
 
             const hamburger = document.getElementById('navbarLinks');
             if (hamburger)
-                hamburger.classList.toggle('is-active');
+                hamburger.classList.remove('is-active');
             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
             $navbarBurgers.forEach((e) => {
-                e.classList.toggle('is-active');
+                e.classList.remove('is-active');
             });
         }
     });
@@ -41,7 +41,7 @@ export default function App() {
                 hamburger.classList.remove('is-active');
             const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
             $navbarBurgers.forEach((e) => {
-                e.classList.toggle('is-active');
+                e.classList.remove('is-active');
             });
         }
     })
