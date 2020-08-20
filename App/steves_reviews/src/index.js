@@ -8,6 +8,8 @@ import App from './App';
 import { UserContextProvider } from "./components/UserContext";
 import * as serviceWorker from './serviceWorker';
 
+fetch('/api/visitor');
+
 ReactDOM.render(
     <BrowserRouter>
         <UserContextProvider>

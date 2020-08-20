@@ -24,7 +24,11 @@ export default function App() {
 
             const hamburger = document.getElementById('navbarLinks');
             if (hamburger)
-                hamburger.classList.remove('is-active');
+                hamburger.classList.toggle('is-active');
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            $navbarBurgers.forEach((e) => {
+                e.classList.toggle('is-active');
+            });
         }
     });
 
@@ -35,6 +39,10 @@ export default function App() {
             const hamburger = document.getElementById('navbarLinks');
             if (hamburger)
                 hamburger.classList.remove('is-active');
+            const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+            $navbarBurgers.forEach((e) => {
+                e.classList.toggle('is-active');
+            });
         }
     })
 

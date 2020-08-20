@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import NoImage from '../images/no-album-cover.png';
-import {getCarouselArt} from "../utils/ImageRetriever";
+import {getCarouselArt,safeGet} from "../utils/ImageRetriever";
 
 export default function ImageCarousel(props) {
     let imagesAll = props.images;
@@ -29,7 +29,7 @@ export default function ImageCarousel(props) {
         <div>
             <figure className='image is-512x512'>
                 <img width='512' height='512' key={imageIndex}
-                     src={filtered.length > 0 ? filtered[imageIndex].url : NoImage}/>
+                     src={filtered.length > 0 ? safeGet(filtered[imageIndex].url) : NoImage}/>
             </figure>
 
             {

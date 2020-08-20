@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
-import {getCoverArtThumb} from "../utils/ImageRetriever";
+import {getCoverArtThumb, safeGet} from "../utils/ImageRetriever";
 
 export default function Review(props) {
     const {reviewDto, hideAlbum} = props;
@@ -32,7 +32,7 @@ export default function Review(props) {
                 <Link to={`/artist/${reviewDto.artist.id}`}><b>{reviewDto.artist.name}</b></Link>
                 <figure className="image is-128x128">
                     <Link to={`/album/${reviewDto.review.album.id}`}>
-                        <img alt='myimage' src={image}/>
+                        <img alt='myimage' src={safeGet(image)}/>
                     </Link>
                 </figure>
                 <Link to={`/album/${reviewDto.review.album.id}`}>{reviewDto.review.album.title}</Link>

@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {Link} from "react-router-dom";
-import {getCoverArtThumb} from "../utils/ImageRetriever";
+import {getCoverArtThumb, safeGet} from "../utils/ImageRetriever";
 
 export default function ArtistPage(props) {
 
@@ -106,7 +106,7 @@ function AlbumLine(props) {
             <td>
                 <figure className="image is-128x128">
                     <Link to={`/album/${album.id}`}>
-                        <img alt='image' src={image} />
+                        <img alt='image' src={safeGet(image)} />
                     </Link>
                 </figure>
             </td>
