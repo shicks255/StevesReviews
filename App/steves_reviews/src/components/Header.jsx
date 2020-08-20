@@ -23,6 +23,20 @@ export default function Header(props) {
                 });
             });
         }
+
+        let navLinks = document.querySelectorAll('.navbar-item');
+        navLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                const hamburger = document.getElementById('navbarLinks');
+                if (hamburger)
+                    hamburger.classList.remove('is-active');
+                const $navbarBurgers = Array.prototype.slice.call(document.querySelectorAll('.navbar-burger'), 0);
+                $navbarBurgers.forEach((e) => {
+                    e.classList.remove('is-active');
+                });
+            })
+        })
+
     });
 
     function logout()
