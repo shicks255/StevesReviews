@@ -32,22 +32,6 @@ public class ReviewDTO {
             this.colorClass = "is-light";
     }
 
-//    public String getAlbumId() {
-//        return albumId;
-//    }
-//
-//    public void setAlbumId(String albumId) {
-//        this.albumId = albumId;
-//    }
-//
-//    public User getUser() {
-//        return user;
-//    }
-//
-//    public void setUser(User user) {
-//        this.user = user;
-//    }
-
     public String getColorClass() {
         return colorClass;
     }

@@ -10,7 +10,10 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @EnableJpaAuditing(dateTimeProviderRef = "dateTimeProviderUtc")
 public class Application {
 
+    private static int serverPort = 8484;
+
     public static void main(String[] args) {
         SpringApplication.run(Application.class);
+        System.out.println("Visit swagger at: http://127.0.0.1:" + serverPort + "/swagger");
     }
 }

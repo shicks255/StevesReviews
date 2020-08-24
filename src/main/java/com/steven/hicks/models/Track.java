@@ -5,7 +5,6 @@ import com.steven.hicks.models.album.Album;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Objects;
 
 @Entity
@@ -30,7 +29,7 @@ public class Track extends AuditClass implements Serializable {
 
     @Override
     public String toString() {
-        return String.format("Track %d - %s", number, title);
+        return String.format("Track %s - %s", number, title);
     }
 
     @Override

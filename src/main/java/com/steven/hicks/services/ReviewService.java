@@ -24,28 +24,12 @@ public class ReviewService {
     ArtistRepository m_artistRepository;
 
     public List<ReviewDTO> getRecentReviews() {
-        return  m_reviewRepository.findTop5ByOrderByAddedOnDesc()
+        List<ReviewDTO> dto =  m_reviewRepository.findTop5ByOrderByAddedOnDesc()
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());
 
-//        List<ReviewWithAlbum> albumsWithReview = reviews.stream().map(x -> {
-//            try
-//            {
-//                Album album = m_albumRepository.findById(x.getAlbumId()).get();
-//                Artist artist = album.getArtist();
-
-//                return new ReviewWithAlbum(
-//                        x.
-//                );
-//            } catch (NullPointerException e)
-//            {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }).collect(Collectors.toList());
-//
-//        return albumsWithReview;
+        return dto;
     }
 
     public List<ReviewDTO> getReviewsForAlbum(String albumId) {
@@ -62,28 +46,6 @@ public class ReviewService {
                 .stream()
                 .map(x -> new ReviewDTO(x))
                 .collect(Collectors.toList());
-//                .stream()
-//                .map(x -> new ReviewDTO(x))
-//                .collect(Collectors.toList());
-//
-//        List<ReviewWithAlbum> rwa = reviews.stream()
-//                .map(r -> {
-//                    Album album = m_albumRepository.findById(r.getAlbumId()).get();
-//                    Artist artist = album.getArtist();
-//                    try
-//                    {
-//                        return new ReviewWithAlbum(
-//                                album,
-//                                r,
-//                                artist
-//                        );
-//                    } catch (Exception e) {
-//                        e.printStackTrace();
-//                    }
-//                    return null;
-//                })
-//                .collect(Collectors.toList());
-//        return rwa;
     }
 
     public Double getAverageRating(String albumId) {
