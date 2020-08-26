@@ -1,5 +1,6 @@
 package com.steven.hicks.models;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.steven.hicks.models.album.Album;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
@@ -8,6 +9,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "reviews")
+@JsonFilter("reviewFilter")
 @EntityListeners(AuditingEntityListener.class)
 public class Review extends AuditClass {
 

@@ -1,5 +1,6 @@
 package com.steven.hicks.models.album;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.steven.hicks.models.AuditClass;
 import com.steven.hicks.models.Track;
@@ -11,6 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "albums")
+@JsonFilter("albumFilter")
 public class Album extends AuditClass {
 
     @Id
@@ -29,10 +31,10 @@ public class Album extends AuditClass {
     private String type = "";
     private String secondaryType = "";
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
     private List<Track> tracks;
 
-    @OneToMany(mappedBy = "album")
+    @OneToMany(mappedBy = "album", fetch = FetchType.LAZY)
     private List<AlbumImage> images;
 
     @Override

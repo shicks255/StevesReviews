@@ -1,5 +1,6 @@
 package com.steven.hicks.models.artist;
 
+import com.fasterxml.jackson.annotation.JsonFilter;
 import com.steven.hicks.models.AuditClass;
 import com.steven.hicks.models.album.Album;
 
@@ -9,6 +10,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "artists")
+@JsonFilter("artistFilter")
 public class Artist extends AuditClass {
 
     @Id

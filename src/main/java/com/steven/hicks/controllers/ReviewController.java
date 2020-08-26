@@ -1,5 +1,8 @@
 package com.steven.hicks.controllers;
 
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.steven.hicks.aspects.Logged;
 import com.steven.hicks.models.Review;
 import com.steven.hicks.models.User;
@@ -8,6 +11,7 @@ import com.steven.hicks.services.JwtTokenService;
 import com.steven.hicks.services.ReviewService;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -27,23 +31,60 @@ public class ReviewController {
     @GetMapping("/recent")
     @Logged
     @Timed()
-    public List<ReviewDTO> getRecentReview() {
-        return m_reviewService.getRecentReviews();
+    public MappingJacksonValue getRecentReview() {
+        List<ReviewDTO> reviews =  m_reviewService.getRecentReviews();
+
+        SimpleBeanPropertyFilter albumFilter = SimpleBeanPropertyFilter.serializeAllExcept("tracks");
+        SimpleBeanPropertyFilter artistFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id");
+        SimpleBeanPropertyFilter reviewFilter = SimpleBeanPropertyFilter.serializeAll();
+
+        FilterProvider filters =
+                new SimpleFilterProvider().addFilter("albumFilter", albumFilter)
+                        .addFilter("artistFilter", artistFilter)
+                        .addFilter("reviewFilter", reviewFilter);
+        MappingJacksonValue mapping = new MappingJacksonValue(reviews);
+        mapping.setFilters(filters);
+        return mapping;
     }
 
     @GetMapping("/user")
     @Logged
     @Timed()
-    public List<ReviewDTO> getUserReviews(HttpServletRequest request) {
+    public MappingJacksonValue getUserReviews(HttpServletRequest request) {
         User user = m_jwtTokenService.getUserFromToken(request);
-        return m_reviewService.getReviewsByUser(user.getId());
+
+        SimpleBeanPropertyFilter albumFilter = SimpleBeanPropertyFilter.serializeAllExcept("tracks");
+        SimpleBeanPropertyFilter artistFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id");
+        SimpleBeanPropertyFilter reviewFilter = SimpleBeanPropertyFilter.serializeAll();
+
+        List<ReviewDTO> reviews = m_reviewService.getReviewsByUser(user.getId());
+        FilterProvider filters =
+                new SimpleFilterProvider().addFilter("albumFilter", albumFilter)
+                        .addFilter("artistFilter", artistFilter)
+                        .addFilter("reviewFilter", reviewFilter);
+        MappingJacksonValue mapping = new MappingJacksonValue(reviews);
+        mapping.setFilters(filters);
+        return mapping;
+
     }
 
     @GetMapping("/user/{userId}")
     @Logged
     @Timed()
-    public List<ReviewDTO> getUserReviews(@PathVariable int userId) {
-        return m_reviewService.getReviewsByUser(userId);
+    public MappingJacksonValue getUserReviews(@PathVariable int userId) {
+        List<ReviewDTO> reviews = m_reviewService.getReviewsByUser(userId);
+
+        SimpleBeanPropertyFilter albumFilter = SimpleBeanPropertyFilter.serializeAllExcept("tracks");
+        SimpleBeanPropertyFilter artistFilter = SimpleBeanPropertyFilter.filterOutAllExcept("id");
+        SimpleBeanPropertyFilter reviewFilter = SimpleBeanPropertyFilter.serializeAll();
+
+        FilterProvider filters =
+                new SimpleFilterProvider().addFilter("albumFilter", albumFilter)
+                .addFilter("artistFilter", artistFilter)
+                .addFilter("reviewFilter", reviewFilter);
+        MappingJacksonValue mapping = new MappingJacksonValue(reviews);
+        mapping.setFilters(filters);
+        return mapping;
     }
 
     @PostMapping("/upsert")
