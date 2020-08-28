@@ -1,6 +1,9 @@
 package com.steven.hicks.controllers;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ser.FilterProvider;
+import com.fasterxml.jackson.databind.ser.impl.SimpleBeanPropertyFilter;
+import com.fasterxml.jackson.databind.ser.impl.SimpleFilterProvider;
 import com.steven.hicks.aspects.Logged;
 import com.steven.hicks.logic.musicBrainz.MBArtistSearcher;
 import com.steven.hicks.models.artist.Artist;
@@ -9,6 +12,7 @@ import com.steven.hicks.services.ArtistService;
 import com.steven.hicks.services.SearchMetricsService;
 import io.micrometer.core.annotation.Timed;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.converter.json.MappingJacksonValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,12 +34,22 @@ public class ArtistController {
     @GetMapping("/{id}")
     @Logged
     @Timed()
-    public Artist getArtist(@PathVariable("id") String id) {
+    public MappingJacksonValue getArtist(@PathVariable("id") String id) {
+
+        SimpleBeanPropertyFilter albumFilter = SimpleBeanPropertyFilter.serializeAllExcept("tracks");
+        SimpleBeanPropertyFilter artistFilter = SimpleBeanPropertyFilter.serializeAllExcept("");
+        SimpleBeanPropertyFilter reviewFilter = SimpleBeanPropertyFilter.serializeAllExcept("artist", "album");
+
         Artist artist = m_artistService.getArtist(id);
         artist.getImages();
-
         m_artistMetricsService.upsertArtistMetrics(id, artist.getName());
-        return artist;
+        FilterProvider filters =
+                new SimpleFilterProvider().addFilter("albumFilter", albumFilter)
+                        .addFilter("artistFilter", artistFilter)
+                        .addFilter("reviewFilter", reviewFilter);
+        MappingJacksonValue mapping = new MappingJacksonValue(artist);
+        mapping.setFilters(filters);
+        return mapping;
     }
 
     @GetMapping("/search/{searchTerms}")

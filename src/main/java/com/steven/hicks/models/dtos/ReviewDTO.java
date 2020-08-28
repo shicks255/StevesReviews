@@ -1,8 +1,6 @@
 package com.steven.hicks.models.dtos;
 
 import com.steven.hicks.models.Review;
-import com.steven.hicks.models.User;
-import com.steven.hicks.models.album.Album;
 import com.steven.hicks.models.artist.Artist;
 
 import java.time.format.DateTimeFormatter;
@@ -20,6 +18,7 @@ public class ReviewDTO {
     public ReviewDTO(Review review) {
 
         this.artist = review.getAlbum().getArtist();
+        this.artist.getAlbums().clear();
         this.review = review;
 
         if (review.getRating() >= 3.5)

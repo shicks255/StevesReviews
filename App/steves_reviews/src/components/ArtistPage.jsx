@@ -15,9 +15,7 @@ export default function ArtistPage(props) {
         const artistJson = await artistData.json();
         setArtist(artistJson);
 
-        const albums = await fetch(`/api/album/artist/${id}`);
-        let albumsJson = await albums.json();
-
+        const albumsJson = artistJson.albums;
         const types = new Set();
         albumsJson.forEach((e) => types.add(e.type));
         setReleaseTypes([...types]);
