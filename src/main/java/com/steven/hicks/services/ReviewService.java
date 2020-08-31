@@ -8,6 +8,7 @@ import com.steven.hicks.repositories.ReviewRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
@@ -56,6 +57,7 @@ public class ReviewService {
         return m_reviewRepository.findFirstByAlbumIdOrderByRatingDesc(albumId);
     }
 
+    @Transactional
     public void updateReview(Review review) {
         m_reviewRepository.update(review.getContent(), review.getRating(), LocalDateTime.now(ZoneOffset.UTC), review.getId());
     }

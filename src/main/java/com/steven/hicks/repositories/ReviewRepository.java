@@ -2,6 +2,7 @@ package com.steven.hicks.repositories;
 
 import com.steven.hicks.models.Review;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 
 import java.time.LocalDateTime;
@@ -19,6 +20,7 @@ public interface ReviewRepository extends JpaRepository<Review, Integer> {
     @Query(value = "select AVG(rating) from reviews where album_id = ?1", nativeQuery = true)
     Double getAverageRating(String albumId);
 
+    @Modifying
     @Query(value = "update reviews set content = ?1, rating = ?2, last_updated = ?3 where id = ?4", nativeQuery = true)
     void update(String content, float rating, LocalDateTime now, int id);
 }

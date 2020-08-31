@@ -30,7 +30,7 @@ public class Review extends AuditClass {
 
     @Override
     public String toString() {
-        return String.format("Review %d %s", id, album.getTitle());
+        return String.format("Review %d", id);
     }
 
     @Override

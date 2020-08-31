@@ -9,11 +9,11 @@ export default function AddEditReview(props) {
     const [reviewContent, setReviewContent]
         = useState('');
     const [rating, setRating]
-        = useState(1.0);
+        = useState(1);
 
     useEffect(() => {
-        setReviewContent(review ? review.content : '');
-        setRating(review ? review.rating : 1.0);
+        setReviewContent(review ? review.review.content : '');
+        setRating(review ? review.review.rating : 1);
     }, [props.review]);
 
     function changeRating(e) {
@@ -29,7 +29,7 @@ export default function AddEditReview(props) {
     function submitForm(e) {
         e.preventDefault();
 
-        const id = review ? review.id : null;
+        const id = review ? review.review.id : null;
         const body = {
             'content': reviewContent,
             'rating': rating,
