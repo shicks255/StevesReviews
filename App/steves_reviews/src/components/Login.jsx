@@ -1,5 +1,4 @@
-import React, {useContext, useState} from 'react';
-import {UserContext} from "./UserContext";
+import React, {useState} from 'react';
 import TimedModal from "./TimedModal";
 
 export default function Login(props) {
@@ -106,12 +105,12 @@ export default function Login(props) {
                 <div className='column is-half is is-offset-one-quarter'>
                     <div className='tabs is-boxed'>
                         <ul>
-                            <li className={tab == 'login' ? 'is-active' : ''}><a onClick={setNewTab}>Login</a></li>
-                            <li className={tab == 'register' ? 'is-active' : ''}><a onClick={setNewTab}>Register</a></li>
+                            <li className={tab === 'login' ? 'is-active' : ''}><a href='' onClick={setNewTab}>Login</a></li>
+                            <li className={tab === 'register' ? 'is-active' : ''}><a href='' onClick={setNewTab}>Register</a></li>
                         </ul>
                     </div>
 
-                    {tab == 'login' ? (
+                    {tab === 'login' ? (
                         <article className='message is-large'>
                             <div className='message-header'>
                                 Login
@@ -186,5 +185,4 @@ export default function Login(props) {
             </div>
         </>
     )
-
 }

@@ -14,7 +14,7 @@ export default function AddEditReview(props) {
     useEffect(() => {
         setReviewContent(review ? review.review.content : '');
         setRating(review ? review.review.rating : 1);
-    }, [props.review]);
+    }, [review]);
 
     function changeRating(e) {
         e.preventDefault();
@@ -37,7 +37,7 @@ export default function AddEditReview(props) {
             'id': id
         }
 
-        const result = fetch('/api/review/upsert', {
+        fetch('/api/review/upsert', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

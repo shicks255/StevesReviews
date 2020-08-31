@@ -13,37 +13,37 @@ export default function MyAccount() {
     const context = useContext(UserContext);
 
     useEffect(() => {
+        async function fetchData() {
+            const userStatsResult = await fetch('/api/user/stats', {
+                headers: {
+                    'Authorization': 'Bearer ' + context.cookie
+                }
+            });
+            const userStats = await userStatsResult.json();
+            setUserStats(userStats);
+
+            const reviewResult = await fetch('/api/review/user', {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + context.cookie
+                }
+            });
+            const reviews = await reviewResult.json();
+            setReviews(reviews);
+
+            const userResult = await fetch('/api/user', {
+                headers: {
+                    'Authorization': 'Bearer ' + context.cookie
+                }
+            });
+            const user = await userResult.json();
+            setUser(user);
+
+            setLoading(false);
+        }
+
         fetchData();
-    }, []);
-
-    async function fetchData() {
-        const userStatsResult = await fetch('/api/user/stats', {
-            headers: {
-                'Authorization': 'Bearer ' + context.cookie
-            }
-        });
-        const userStats = await userStatsResult.json();
-        setUserStats(userStats);
-
-        const reviewResult = await fetch('/api/review/user', {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + context.cookie
-            }
-        });
-        const reviews = await reviewResult.json();
-        setReviews(reviews);
-
-        const userResult = await fetch('/api/user', {
-            headers: {
-                'Authorization': 'Bearer ' + context.cookie
-            }
-        });
-        const user = await userResult.json();
-        setUser(user);
-
-        setLoading(false);
-    }
+    }, [context]);
 
     if (loading)
         return (
@@ -83,7 +83,7 @@ export default function MyAccount() {
                     </div>
                 </div>
                 {
-                    reviews.length == 0 ?
+                    reviews.length === 0 ?
                         'No reviews yet'
                         :
                         reviews.map(rwa => {

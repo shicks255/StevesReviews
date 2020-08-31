@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useState, useEffect} from 'react';
 import UserStats from "./UserStats";
 import Review from "./Review";
 
@@ -12,29 +12,31 @@ export default function UserPage(props) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        async function fetchUserStats() {
+            const userStatsResult = await fetch('/api/user/stats/' + id);
+            const userStats = await userStatsResult.json();
+            setUserStats(userStats);
+        }
+
+        async function fetchUser() {
+            const userResult = await fetch('/api/user/' + id);
+            const user = await userResult.json();
+            setUser(user);
+        }
+
+        async function fetchReviews() {
+            const reviewResult = await fetch('/api/review/user/' + id);
+            const reviews = await reviewResult.json();
+            setReviews(reviews);
+        }
+
         fetchUserStats();
         fetchUser();
         fetchReviews();
         setLoading(false);
-    }, []);
+    }, [id]);
 
-    async function fetchUserStats() {
-        const userStatsResult = await fetch('/api/user/stats/' + id);
-        const userStats = await userStatsResult.json();
-        setUserStats(userStats);
-    }
 
-    async function fetchUser() {
-        const userResult = await fetch('/api/user/' + id);
-        const user = await userResult.json();
-        setUser(user);
-    }
-
-    async function fetchReviews() {
-        const reviewResult = await fetch('/api/review/user/' + id);
-        const reviews = await reviewResult.json();
-        setReviews(reviews);
-    }
 
     if (loading)
         return (

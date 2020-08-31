@@ -16,24 +16,24 @@ export default function AlbumPage(props) {
     const cookie = context.cookie;
 
     useEffect(() => {
+        async function getAlbumAndArtistAndImage() {
+            const result = await fetch(`/api/album/${id}`, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + cookie
+                }
+            });
+            const data = await result.json();
+            setData(data);
+
+            let discs = new Set();
+            data.album.tracks.forEach(x => discs.add(x.disc));
+            setDiscs([...discs]);
+            setLoading(false);
+        }
+
         getAlbumAndArtistAndImage();
-    }, [cookie]);
-
-    async function getAlbumAndArtistAndImage() {
-        const result = await fetch(`/api/album/${id}`, {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + cookie
-            }
-        });
-        const data = await result.json();
-        setData(data);
-
-        let discs = new Set();
-        data.album.tracks.forEach(x => discs.add(x.disc));
-        setDiscs([...discs]);
-        setLoading(false);
-    }
+    }, [cookie, id]);
 
     function getTimeStamp(millis) {
         const totalSeconds = (millis/1000);
@@ -81,7 +81,7 @@ export default function AlbumPage(props) {
                                 <tr>
                                     <td colSpan={3}>{discs.length > 1 ? <b>Disc {d}</b> : ''}</td>
                                 </tr>
-                                {data.album.tracks.filter(tr => tr.disc == d).map(tr => {
+                                {data.album.tracks.filter(tr => tr.disc === d).map(tr => {
                                     return <tr key={tr.id}>
                                         <td className='has-text-right'>{tr.number}.</td>
                                         <td>{tr.title}</td>

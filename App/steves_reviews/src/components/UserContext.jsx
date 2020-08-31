@@ -27,8 +27,10 @@ const UserContextProvider = (props) =>
                 setLoggedIn(true);
                 return true;
             }
-            else
+            else {
                 document.cookie = "sreviews=; expires=Thu, 01 Jan 1970 00:00:00 UTC";
+                setLoggedIn(false);
+            }
         }
         return false;
     }

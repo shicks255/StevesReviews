@@ -7,13 +7,13 @@ export default function ImageCarousel(props) {
     const [imageIndex, setImageIndex] = useState('');
     const [filtered, setFiltered] = useState([]);
 
-    async function getImages() {
-        const x = await getCarouselArt(imagesAll);
-        setFiltered(x);
-        setImageIndex(0);
-    }
-
     useEffect(() => {
+        async function getImages() {
+            const x = await getCarouselArt(imagesAll);
+            setFiltered(x);
+            setImageIndex(0);
+        }
+
         getImages();
     }, [imagesAll]);
 
@@ -28,7 +28,7 @@ export default function ImageCarousel(props) {
     return (
         <div>
             <figure className='image is-512x512'>
-                <img width='512' height='512' key={imageIndex}
+                <img width='512' height='512' key={imageIndex} alt={imageIndex}
                      src={filtered.length > 0 ? safeGet(filtered[imageIndex].url) : NoImage}/>
             </figure>
 

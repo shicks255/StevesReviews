@@ -10,23 +10,23 @@ export default function ArtistPage(props) {
     const [releaseTypes, setReleaseTypes] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    async function fetchData() {
-        const artistData = await fetch(`/api/artist/${id}`);
-        const artistJson = await artistData.json();
-        setArtist(artistJson);
-
-        const albumsJson = artistJson.albums;
-        const types = new Set();
-        albumsJson.forEach((e) => types.add(e.type));
-        setReleaseTypes([...types]);
-
-        setAlbums(albumsJson);
-        setLoading(false);
-    }
-
     useEffect(() => {
+        async function fetchData() {
+            const artistData = await fetch(`/api/artist/${id}`);
+            const artistJson = await artistData.json();
+            setArtist(artistJson);
+
+            const albumsJson = artistJson.albums;
+            const types = new Set();
+            albumsJson.forEach((e) => types.add(e.type));
+            setReleaseTypes([...types]);
+
+            setAlbums(albumsJson);
+            setLoading(false);
+        }
+
         fetchData();
-    }, []);
+    }, [id]);
 
     if (loading)
         return (
@@ -50,14 +50,14 @@ export default function ArtistPage(props) {
                     <div className="card-image">
                         <div className="image">
                             <figure className="image is-512x512">
-                                {artist.images ? artist.images[0] ? <img src={artist.images[0].url} /> : '' : ''}
+                                {artist.images ? artist.images[0] ? <img alt={artist.name} src={artist.images[0].url} /> : '' : ''}
                             </figure>
                         </div>
                         <div className="card-content">
                             <div className="content">
                                 {artist.disambiguation}
                                 <br/>
-                                <a href="" target="_blank">Read more on Last.fm</a>
+                                <a href="https://last.fm" target="_blank">Read more on Last.fm</a>
                             </div>
                         </div>
                     </div>
@@ -71,7 +71,7 @@ export default function ArtistPage(props) {
                             <p><b>{rt}s</b></p>
                             <table className="table">
                                 <tbody>
-                                {albums.filter(x => x.type == rt).map(a => {
+                                {albums.filter(x => x.type === rt).map(a => {
                                     return <AlbumLine key={a.id} album={a} />
                                 })}
                                 </tbody>
@@ -90,21 +90,21 @@ function AlbumLine(props) {
     const album = props.album;
     const [image, setImage] = useState('');
 
-    async function getImage() {
-        const x = await getCoverArtThumb(album);
-        setImage(x);
-    }
-
     useEffect(() => {
+        async function getImage() {
+            const x = await getCoverArtThumb(album);
+            setImage(x);
+        }
+
         getImage();
-    }, [])
+    }, [album])
 
     return (
         <tr key={album.id}>
             <td>
                 <figure className="image is-128x128">
                     <Link to={`/album/${album.id}`}>
-                        <img alt='image' src={safeGet(image)} />
+                        <img alt={album.title} src={safeGet(image)} />
                     </Link>
                 </figure>
             </td>

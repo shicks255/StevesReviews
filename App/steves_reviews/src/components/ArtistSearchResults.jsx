@@ -7,16 +7,16 @@ export default function ArtistSearchResults(props) {
     const [artists, setArtists] = useState([]);
     const [loading, setLoading] = useState(true);
 
-    async function searchArtists() {
-        const data = await fetch(`/api/artist/search/${search}`);
-        const artistResults = await data.json();
-        setArtists(artistResults);
-        setLoading(false);
-    }
-
     useEffect(() => {
+        async function searchArtists() {
+            const data = await fetch(`/api/artist/search/${search}`);
+            const artistResults = await data.json();
+            setArtists(artistResults);
+            setLoading(false);
+        }
+
         searchArtists();
-    }, []);
+    }, [search]);
 
     if (loading)
         return <div>loading</div>

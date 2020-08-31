@@ -6,14 +6,14 @@ export default function Review(props) {
     const {reviewDto, hideAlbum} = props;
     const [image, setImage] = useState('');
 
-    async function getImage() {
-        const x = await getCoverArtThumb(reviewDto.review.album);
-        setImage(x);
-    }
-
     useEffect(() => {
+        async function getImage() {
+            const x = await getCoverArtThumb(reviewDto.review.album);
+            setImage(x);
+        }
+
         getImage();
-    }, []);
+    }, [reviewDto]);
 
     function toggleCollapse(e) {
         e.preventDefault();
